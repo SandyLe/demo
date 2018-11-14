@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.sl</groupId>
-            <artifactId>domain</artifactId>
+            <artifactId>demo-core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

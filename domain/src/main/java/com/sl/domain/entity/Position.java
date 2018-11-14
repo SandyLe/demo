@@ -1,22 +1,8 @@
 package com.sl.domain.entity;
 
-public class Position {
-    private Long id;
-    private String name;
+import com.sl.domain.entity.base.BaseEntity;
+import io.swagger.annotations.ApiModel;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+@ApiModel(value = "Position", description = "岗位")
+public class Position extends BaseEntity {
 }

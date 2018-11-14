@@ -1,23 +1,9 @@
 package com.sl.domain.entity;
 
-public class User {
+import com.sl.domain.entity.base.BaseEntity;
+import io.swagger.annotations.ApiModel;
 
-    private Long id;
-    private String name;
+@ApiModel(value = "User", description = "用户")
+public class User extends BaseEntity {
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
