@@ -3,15 +3,22 @@ package com.sl.domain.entity.base;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.util.Date;
+@MappedSuperclass
 @ApiModel(value = "BaseEntity", description = "基类")
 public class BaseEntity {
     @ApiModelProperty(value = "id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ApiModelProperty(value = "名称")
     private String name;
     @ApiModelProperty(value = "描述")
-    private String desc;
+    private String description;
     @ApiModelProperty(value = "创建时间")
     private Date createDate;
     @ApiModelProperty(value = "更新时间")
@@ -37,12 +44,12 @@ public class BaseEntity {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getCreateDate() {
