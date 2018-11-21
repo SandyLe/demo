@@ -1,5 +1,6 @@
 package com.sl.domain.entity.base;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -17,6 +18,8 @@ public class BaseEntity {
     private Long id;
     @ApiModelProperty(value = "名称")
     private String name;
+    @ApiModelProperty(value = "数据状态")
+    private Integer rowSts;
     @ApiModelProperty(value = "描述")
     private String description;
     @ApiModelProperty(value = "创建时间")
@@ -82,5 +85,13 @@ public class BaseEntity {
 
     public void setUpdateUserId(Long updateUserId) {
         this.updateUserId = updateUserId;
+    }
+
+    public Integer getRowSts() {
+        return rowSts;
+    }
+
+    public void setRowSts(Integer rowSts) {
+        this.rowSts = rowSts;
     }
 }

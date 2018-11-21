@@ -13,6 +13,12 @@ import java.util.List;
 @ApiModel(value = "User", description = "用户")
 public class User extends BaseEntity {
 
+    @ApiModelProperty(value = "密码")
+    private String password;
+
+    @ApiModelProperty(value = "盐值")
+    private String salt;
+
     @ManyToMany
     @JoinTable(name = "user_position", joinColumns = @JoinColumn( name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "position_id"))
@@ -25,5 +31,21 @@ public class User extends BaseEntity {
 
     public void setPositions(List<Position> positions) {
         this.positions = positions;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

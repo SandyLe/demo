@@ -1,12 +1,12 @@
 package com.sl.demo.server.controller;
 
+import com.sl.demo.core.utils.SpringUtils;
 import com.sl.demo.server.service.PositionService;
 import com.sl.demo.server.service.UserService;
 import com.sl.domain.entity.Position;
 import com.sl.domain.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +27,7 @@ public class TestController {
     @ApiOperation(value = "测试",notes = "Test")
     @GetMapping(value = {"/test/test"})
     public String test() {
+
         Position position = new Position();
         position.setName("总经理");
         position.setCreateDate(new Date());

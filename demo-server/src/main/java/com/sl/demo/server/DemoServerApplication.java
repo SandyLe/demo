@@ -1,5 +1,7 @@
 package com.sl.demo.server;
 
+import com.sl.demo.core.configuration.CoreConfig;
+import com.sl.demo.core.configuration.ShiroConfig;
 import com.sl.demo.core.configuration.Swagger2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -7,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@ImportAutoConfiguration({Swagger2.class})
+@ImportAutoConfiguration({Swagger2.class, CoreConfig.class, ShiroConfig.class})
 @EntityScan(basePackages = {"com.sl.domain.entity"})
 public class DemoServerApplication {
 

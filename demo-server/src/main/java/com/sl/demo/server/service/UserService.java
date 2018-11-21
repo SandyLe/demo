@@ -1,8 +1,8 @@
 package com.sl.demo.server.service;
 
+import com.sl.demo.core.common.AbstractUserService;
 import com.sl.domain.entity.User;
-import org.springframework.stereotype.Service;
 
-public interface UserService {
+public interface UserService extends AbstractUserService {
     public void save(User user);
 }
