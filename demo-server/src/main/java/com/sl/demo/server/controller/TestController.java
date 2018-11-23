@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -48,6 +49,33 @@ public class TestController {
         positions.add(position);
         user.setPositions(positions);
         userService.save(user);
+        return "hello word1!" + user.getName() + position.getName();
+    }
+
+    @ApiOperation(value = "测试",notes = "Test")
+    @PostMapping(value = {"/test/tests"})
+    public String test2() {
+
+        Position position = new Position();
+        position.setName("总经理2");
+        position.setCreateDate(new Date());
+        position.setCreateUserId(1l);
+        position.setUpdateDate(new Date());
+        position.setUpdateUserId(1l);
+        position.setDescription("test");
+//        positionService.save(position);
+
+        User user = new User();
+        user.setName("Sandy2");
+        user.setCreateDate(new Date());
+        user.setCreateUserId(1l);
+        user.setUpdateDate(new Date());
+        user.setUpdateUserId(1l);
+        user.setDescription("test");
+        List<Position> positions = new ArrayList<Position>();
+        positions.add(position);
+        user.setPositions(positions);
+//        userService.save(user);
         return "hello word1!" + user.getName() + position.getName();
     }
 }
