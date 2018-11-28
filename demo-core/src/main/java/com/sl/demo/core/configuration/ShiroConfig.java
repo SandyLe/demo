@@ -1,6 +1,7 @@
 package com.sl.demo.core.configuration;
 
 import com.sl.demo.core.security.shiro.filter.FormAuthenticationFilter;
+import com.sl.demo.core.security.shiro.filter.PermissionsAuthorizationFilter;
 import com.sl.demo.core.utils.MyShiroRealm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -33,10 +34,12 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
         Map<String, Filter> filters = new HashMap<String, Filter>();
         filters.put("authc", new FormAuthenticationFilter());
+        filters.put("perms", new PermissionsAuthorizationFilter());
         shiroFilterFactoryBean.setFilters(filters);
         Map<String, String> chainMap = new LinkedHashMap<String, String>();
         chainMap.put("/image/**", "anon");
         chainMap.put("/test/**", "authc");
+        chainMap.put("/*", "perms");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(chainMap);
         return shiroFilterFactoryBean;
     }
