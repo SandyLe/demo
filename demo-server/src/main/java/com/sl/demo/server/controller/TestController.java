@@ -30,13 +30,13 @@ public class TestController {
     public String test() {
 
         Position position = new Position();
-        position.setName("总经理");
+        position.setName("经理");
         position.setCreateDate(new Date());
         position.setCreateUserId(1l);
         position.setUpdateDate(new Date());
         position.setUpdateUserId(1l);
         position.setDescription("test");
-        positionService.save(position);
+//        positionService.save(position);
 
         User user = new User();
         user.setName("Sandyq2");
@@ -48,8 +48,8 @@ public class TestController {
         List<Position> positions = new ArrayList<Position>();
         positions.add(position);
         user.setPositions(positions);
-        userService.save(user);
-        return "hello word1!" + user.getName() + position.getName();
+//        userService.save(user);
+        return "hello word1!" + user.getName() + position.getName() + "测试环境搭建完善";
     }
 
     @ApiOperation(value = "测试",notes = "Test")
@@ -76,6 +76,6 @@ public class TestController {
         positions.add(position);
         user.setPositions(positions);
 //        userService.save(user);
-        return "hello word1!" + user.getName() + position.getName();
+        return "hello word1!" + user.getName() + position.getName()+"环境搭好了";
     }
 }

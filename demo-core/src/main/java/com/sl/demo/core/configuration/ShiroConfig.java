@@ -38,7 +38,8 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilters(filters);
         Map<String, String> chainMap = new LinkedHashMap<String, String>();
         chainMap.put("/image/**", "anon");
-        chainMap.put("/test/**", "authc");
+        chainMap.put("/test/**", "anon");
+//        chainMap.put("/test/**", "authc");
         chainMap.put("/*", "perms");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(chainMap);
         return shiroFilterFactoryBean;
