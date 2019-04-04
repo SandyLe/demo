@@ -78,4 +78,10 @@ public class TestController {
 //        userService.save(user);
         return "hello word1!" + user.getName() + position.getName()+"环境搭好了";
     }
+
+    @GetMapping(value = "/test/getCookieInfo")
+    public String testGetCookieInfo(){
+        return "the method test get cookie info";
+    }
+
 }
