@@ -1,11 +1,15 @@
 server:
-    port: 80
+    ssl:
+      key-store: classpath:1023769_ssl.qifou.net.pfx
+      key-store-password: IK50XQSj
+      keyStoreType: PKCS12
+    port: 443
 spring:
     datasource:
         url: jdbc:mysql://localhost:3306/testsl?useUnicode=true&characterEncoding=utf-8&useSSL=false
         username: root
         password: tomkluas
-        #password: root
+        #password: 198765
 
     jpa:
       hibernate:
