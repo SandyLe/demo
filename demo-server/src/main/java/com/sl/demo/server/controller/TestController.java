@@ -29,6 +29,7 @@ public class TestController {
     @GetMapping(value = {"/test/test"})
     public String test() {
 
+        Long t1 = System.currentTimeMillis();
         Position position = new Position();
         position.setName("经理");
         position.setCreateDate(new Date());
@@ -49,6 +50,7 @@ public class TestController {
         positions.add(position);
         user.setPositions(positions);
 //        userService.save(user);
+        System.out.println(System.currentTimeMillis()-t1);
         return "hello word1!" + user.getName() + position.getName() + "测试环境搭建完善";
     }
 
@@ -82,6 +84,10 @@ public class TestController {
     @GetMapping(value = "/test/getCookieInfo")
     public String testGetCookieInfo(){
         return "the method test get cookie info";
+    }
+    @GetMapping(value = "/testLoginAuth/getCookieInfo")
+    public String testLoginAuth(){
+        return "the method test get testLoginAuth info";
     }
 
 }

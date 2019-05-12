@@ -21,4 +21,9 @@ public class UserServiceImpl implements UserService {
     public User findByName(String name) {
         return userRepository.findByName(name);
     }
+
+    @Override
+    public User findByWechatOpenId(String wechatOpenId){
+        return userRepository.findByWechatOpenId(wechatOpenId);
+    }
 }

@@ -4,4 +4,5 @@ import com.sl.domain.entity.User;
 
 public interface AbstractUserService {
     public User findByName(String userName);
+    public User findByWechatOpenId(String wechatOpenId);
 }

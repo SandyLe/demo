@@ -7,4 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface UserRepository extends JpaRepository<User,Long> {
     @Query("select u from User u where (u.name = ?1) and u.rowSts = 10")
     public User findByName(String name);
+
+    @Query("select u from User u where (u.wechatOpenId = ?1) and u.rowSts = 10")
+    public User findByWechatOpenId(String wechatOpenId);
 }

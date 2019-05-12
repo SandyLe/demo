@@ -1,11 +1,12 @@
 package com.sl.domain.entity;
 
 import com.sl.domain.entity.base.BaseEntity;
+import com.sl.domain.enums.Gender;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javafx.geometry.Pos;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,6 +19,27 @@ public class User extends BaseEntity {
 
     @ApiModelProperty(value = "盐值")
     private String salt;
+
+    @ApiModelProperty(value = "微信ID")
+    private String wechatOpenId;
+
+    @ApiModelProperty(value = "电话")
+    private String phone;
+
+    @ApiModelProperty(value = "昵称")
+    private String nickName;
+
+    @ApiModelProperty(value = "头像URL")
+    private String avatarUrl;
+
+    @ApiModelProperty(value = "性别")
+    private Gender gender;
+
+    @ApiModelProperty(value = "创建时间")
+    private String email;
+
+    @ApiModelProperty(value = "创建时间")
+    private Date lastLoginTime;
 
     @ManyToMany
     @JoinTable(name = "user_position", joinColumns = @JoinColumn( name = "user_id"),
@@ -47,5 +69,61 @@ public class User extends BaseEntity {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public String getWechatOpenId() {
+        return wechatOpenId;
+    }
+
+    public void setWechatOpenId(String wechatOpenId) {
+        this.wechatOpenId = wechatOpenId;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 }
