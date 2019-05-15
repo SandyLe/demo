@@ -45,7 +45,7 @@ public class DemoServerApplication {
         //监听http的端口号
         connector.setPort(80);
         connector.setSecure(false);
-        //监听到http的端口号后转向到的https的端口号
+        //监听到http的端口号后转向到的https的端口号ss
         System.out.println("监听到了80端口");
         connector.setRedirectPort(443);//这里的端口写成和配置文件一样的端口就Ok
         return connector;

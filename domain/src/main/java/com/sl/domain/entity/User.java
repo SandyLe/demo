@@ -33,7 +33,7 @@ public class User extends BaseEntity {
     private String avatarUrl;
 
     @ApiModelProperty(value = "性别")
-    private Gender gender;
+    private Integer gender;
 
     @ApiModelProperty(value = "创建时间")
     private String email;
@@ -103,11 +103,11 @@ public class User extends BaseEntity {
         this.avatarUrl = avatarUrl;
     }
 
-    public Gender getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 

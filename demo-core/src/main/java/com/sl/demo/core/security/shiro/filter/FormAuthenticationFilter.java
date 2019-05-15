@@ -1,5 +1,6 @@
 package com.sl.demo.core.security.shiro.filter;
 
+import com.sl.domain.dto.wechat.WechatOpenidToken;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
@@ -13,6 +14,31 @@ public class FormAuthenticationFilter extends AuthenticatingFilter {
     public static final String DEFAULT_USERNAME = "username";
     public static final String DEFAULT_PASSWORD = "password";
     public static final String DEFAULT_REMEMBERME = "rememberMe";
+
+    @Override
+    public boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
+        return super.onPreHandle(request, response, mappedValue);
+    }
+
+    @Override
+    protected boolean isLoginRequest(ServletRequest request, ServletResponse response) {
+
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String token = httpServletRequest.getHeader("access-token");
+        if(null != token && !"".equals(token)){
+            return true;
+        }
+        return super.isLoginRequest(request, response);
+    }
+
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        if(isLoginRequest(request, response)){
+            WechatOpenidToken token = new WechatOpenidToken(((HttpServletRequest)request).getHeader("access-token"));
+            getSubject(request,response).login(token);
+        }
+        return super.isAccessAllowed(request, response, mappedValue);
+    }
 
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {

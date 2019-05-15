@@ -11,6 +11,7 @@ public class WechatAccountDto {
     private String nickName;
     private String province;
     private String code;
+    private String openid;
 
     public Long getId() {
         return id;
@@ -82,5 +83,13 @@ public class WechatAccountDto {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 }
