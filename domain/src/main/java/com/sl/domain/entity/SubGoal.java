@@ -9,8 +9,8 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "sl_goal")
-@ApiModel(value = "Goal", description = "操作权限")
+@Table(name = "sl_sub_goal")
+@ApiModel(value = "SubGoal", description = "操作权限")
 public class SubGoal extends BaseEntity {
 
     @ApiModelProperty(value = "步骤")
