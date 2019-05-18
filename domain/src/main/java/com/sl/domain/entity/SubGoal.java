@@ -14,7 +14,7 @@ import java.util.Date;
 public class SubGoal extends BaseEntity {
 
     @ApiModelProperty(value = "步骤")
-    private Integer index;
+    private Integer orders;
     @ApiModelProperty(value = "备注")
     private String text;
     @ApiModelProperty(value = "状态")
@@ -22,7 +22,7 @@ public class SubGoal extends BaseEntity {
     @ApiModelProperty(value = "截止日期")
     private Date deadLine;
     @ApiModelProperty(value = "主表ID")
-    private Integer parentid;
+    private Long parentId;
     @ApiModelProperty(value = "分值")
     private Double score;
 
@@ -50,20 +50,12 @@ public class SubGoal extends BaseEntity {
         this.deadLine = deadLine;
     }
 
-    public Integer getParentid() {
-        return parentid;
+    public Integer getOrders() {
+        return orders;
     }
 
-    public Integer getIndex() {
-        return index;
-    }
-
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
-    public void setParentid(Integer parentid) {
-        this.parentid = parentid;
+    public void setOrders(Integer orders) {
+        this.orders = orders;
     }
 
     public Double getScore() {
@@ -72,5 +64,13 @@ public class SubGoal extends BaseEntity {
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 }
