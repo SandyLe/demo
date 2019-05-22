@@ -2,6 +2,7 @@ package com.sl.demo.server.service.impl;
 
 import com.sl.demo.server.repository.UserRepository;
 import com.sl.demo.server.service.UserService;
+import com.sl.demo.server.util.PasswordHelper;
 import com.sl.domain.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
+        PasswordHelper.encryptPassword(user);
         userRepository.save(user);
     }
 
