@@ -22,8 +22,11 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
-    @PostMapping(value = {"/login"})
+    @PostMapping(value = {"/api/login"})
     public Result<LoginUser> login(@RequestBody UserLoginDto userLoginDto) throws Exception{
+
+
+        System.out.println(userLoginDto);
         UsernamePasswordToken token = new UsernamePasswordToken(userLoginDto.getUsername(),userLoginDto.getPassword());
         Subject subject = SecurityUtils.getSubject();
         subject.login(token);

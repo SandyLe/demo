@@ -44,8 +44,8 @@ public class ShiroConfig {
         Map<String, String> chainMap = new LinkedHashMap<String, String>();
         chainMap.put("/login.jsp","anon");
         chainMap.put("/image/**", "anon");
-        chainMap.put("/test/**", "anon");
-        chainMap.put("/login", "anon");
+        chainMap.put("/api/test/**", "anon");
+        chainMap.put("/api/login", "anon");
         chainMap.put("/wechat/auth", "anon");
         chainMap.put("/**", "authc");
 //        chainMap.put("/*", "perms");

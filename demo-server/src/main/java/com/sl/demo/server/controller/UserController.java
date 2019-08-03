@@ -15,7 +15,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(value = {"/user/save"})
+    @PostMapping(value = {"/test/user/save"})
     public Long save(@RequestBody User user){
         userService.save(user);
         return user.getId();

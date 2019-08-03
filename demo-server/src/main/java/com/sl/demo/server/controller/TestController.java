@@ -1,8 +1,12 @@
 package com.sl.demo.server.controller;
 
 import com.sl.demo.core.utils.SpringUtils;
+import com.sl.demo.server.service.GoalService;
 import com.sl.demo.server.service.PositionService;
 import com.sl.demo.server.service.UserService;
+import com.sl.demo.server.util.LoginUtils;
+import com.sl.domain.dto.util.Result;
+import com.sl.domain.entity.Goal;
 import com.sl.domain.entity.Position;
 import com.sl.domain.entity.User;
 import io.swagger.annotations.Api;
@@ -10,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -24,6 +29,21 @@ public class TestController {
     private UserService userService;
     @Autowired
     private PositionService positionService;
+
+    @Autowired
+    private GoalService goalService;
+
+    @PostMapping(value = {"/test/goal/save"})
+    public Result<Long> save(@RequestBody Goal goal){
+        if(null == goal.getId()){
+            goal.setCreateUserId(1l);
+            goal.setCreateDate(new Date());
+        }
+        goal.setUpdateUserId(1l);
+        goal.setUpdateDate(new Date());
+        goalService.save(goal);
+        return new Result<Long>(goal.getId());
+    }
 
     @ApiOperation(value = "测试",notes = "Test")
     @GetMapping(value = {"/test/test"})
