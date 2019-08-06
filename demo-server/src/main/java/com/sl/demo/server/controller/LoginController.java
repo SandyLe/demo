@@ -44,4 +44,13 @@ public class LoginController {
         LoginUtils.getSession().setAttribute(LoginUtils.LOGIN_USER, loginUser);
         return new Result<LoginUser>(loginUser);
     }
+
+    @GetMapping(value = {"/getUserInfo"})
+    public Result<LoginUser> getUserInfo(@RequestParam String token) throws Exception{
+        LoginUser loginUser =(LoginUser)LoginUtils.getSession().getAttribute(LoginUtils.LOGIN_USER);
+        if(null == loginUser || !token.equals(loginUser.getToken())){
+            return new Result<>();
+        }
+        return new Result<LoginUser>(loginUser);
+    }
 }

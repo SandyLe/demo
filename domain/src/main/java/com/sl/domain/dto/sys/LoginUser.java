@@ -36,6 +36,9 @@ public class LoginUser {
     @ApiModelProperty(value = "创建时间")
     private Date lastLoginTime;
 
+    @ApiModelProperty(value = "访问权限")
+    private Boolean access = true;
+
     public Long getId() {
         return id;
     }
@@ -114,5 +117,13 @@ public class LoginUser {
 
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+    }
+
+    public Boolean getAccess() {
+        return access;
+    }
+
+    public void setAccess(Boolean access) {
+        this.access = access;
     }
 }
