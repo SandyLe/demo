@@ -8,7 +8,7 @@ import javax.servlet.ServletResponse;
 
 public class PermissionsAuthorizationFilter extends AuthorizationFilter {
     @Override
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         Subject subject = getSubject(request, response);
         String[] perms = (String[]) mappedValue;
         if(null != perms && perms.length > 0){

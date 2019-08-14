@@ -1,5 +1,6 @@
 package com.sl.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sl.domain.entity.base.BaseEntity;
 import com.sl.domain.enums.Gender;
 import io.swagger.annotations.ApiModel;
@@ -47,6 +48,7 @@ public class User extends BaseEntity {
     @ApiModelProperty(value = "岗位")
     private List<Position> positions;
 
+    @JsonIgnore
     public List<Position> getPositions() {
         return positions;
     }

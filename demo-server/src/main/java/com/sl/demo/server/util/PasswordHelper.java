@@ -66,7 +66,7 @@ public class PasswordHelper {
 		return entryptedPassword;
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 
 		User user = new User();
 		user.setPassword("test123");
@@ -81,17 +81,17 @@ public class PasswordHelper {
 
 	public void setRandomNumberGenerator(RandomNumberGenerator randomNumberGenerator) {
 
-		this.randomNumberGenerator = randomNumberGenerator;
+		PasswordHelper.randomNumberGenerator = randomNumberGenerator;
 	}
 
 	public void setAlgorithmName(String algorithmName) {
 
-		this.algorithmName = algorithmName;
+		PasswordHelper.algorithmName = algorithmName;
 	}
 
 	public void setHashIterations(int hashIterations) {
 
-		this.hashIterations = hashIterations;
+		PasswordHelper.hashIterations = hashIterations;
 	}
 
 	public boolean isStoredCredentialsHexEncoded() {
@@ -101,6 +101,6 @@ public class PasswordHelper {
 
 	public void setStoredCredentialsHexEncoded(boolean storedCredentialsHexEncoded) {
 
-		this.storedCredentialsHexEncoded = storedCredentialsHexEncoded;
+		PasswordHelper.storedCredentialsHexEncoded = storedCredentialsHexEncoded;
 	}
 }

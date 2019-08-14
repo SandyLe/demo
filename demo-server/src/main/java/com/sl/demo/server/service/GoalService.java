@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface GoalService {
 
-    public void save(Goal goal);
+    void save(Goal goal);
 
-    public Goal findById(Long id);
+    Goal findById(Long id);
 
-    public List<Goal> findByUserId(Long id);
+    List<Goal> findByUserId(Long id);
 }

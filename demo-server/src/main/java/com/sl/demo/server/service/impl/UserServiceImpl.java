@@ -3,8 +3,10 @@ package com.sl.demo.server.service.impl;
 import com.sl.demo.server.repository.UserRepository;
 import com.sl.demo.server.service.UserService;
 import com.sl.demo.server.util.PasswordHelper;
+import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,5 +29,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByWechatOpenId(String wechatOpenId){
         return userRepository.findByWechatOpenId(wechatOpenId);
+    }
+
+    @Override
+    public Pagination<User> findPage(Pagination<User> pagination) {
+        Page<User> page = userRepository.findAll(pagination);
+        pagination.setTotalRecords(page.getTotalElements());
+        pagination.setData(page.getContent());
+        return pagination;
     }
 }

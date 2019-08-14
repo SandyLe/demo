@@ -41,7 +41,7 @@ public class FormAuthenticationFilter extends AuthenticatingFilter {
     }
 
     @Override
-    protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
+    protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
         return createToken(WebUtils.getCleanParam(request, DEFAULT_USERNAME), WebUtils.getCleanParam(request, DEFAULT_PASSWORD), request,response);
     }
 
