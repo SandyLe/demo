@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Bean;
 @EntityScan(basePackages = {"com.sl.domain.entity"})
 public class DemoServerApplication {
 
-    @Bean
+    /*@Bean
     public EmbeddedServletContainerFactory servletContainer() {
         //springboot版本不同可能下面的类名会不同或者类的包路径会不同
         TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
@@ -49,7 +49,7 @@ public class DemoServerApplication {
         System.out.println("监听到了80端口");
         connector.setRedirectPort(443);//这里的端口写成和配置文件一样的端口就Ok
         return connector;
-    }
+    }*/
     public static void main(String[] args) {
         SpringApplication.run(DemoServerApplication.class, args);
     }

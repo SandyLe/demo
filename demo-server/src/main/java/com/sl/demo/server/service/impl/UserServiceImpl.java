@@ -38,4 +38,16 @@ public class UserServiceImpl implements UserService {
         pagination.setData(page.getContent());
         return pagination;
     }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findOne(id);
+    }
+
+    @Override
+    public void delete(Long[] id){
+        for (Long tempId : id){
+            userRepository.delete(tempId);
+        }
+    }
 }

@@ -7,4 +7,6 @@ import com.sl.domain.entity.User;
 public interface UserService extends AbstractUserService {
     void save(User user);
     Pagination<User> findPage(Pagination<User> pagination);
+    User findById(Long id);
+    void delete(Long[] id);
 }

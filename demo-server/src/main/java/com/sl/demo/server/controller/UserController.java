@@ -25,4 +25,15 @@ public class UserController {
         pagination = userService.findPage(pagination);
         return new Result<Pagination> (pagination);
     }
+    @GetMapping(value = {"/user/getOne"})
+    public Result<User> getOne(Long id){
+        User user = userService.findById(id);
+        return new Result<User> (user);
+    }
+
+    @PostMapping(value = {"/user/delete"})
+    public Result<Long[]> delete(Long[] id){
+        userService.delete(id);
+        return new Result<Long[]> (id);
+    }
 }
