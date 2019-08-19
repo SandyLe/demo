@@ -53,4 +53,12 @@ public class LoginController {
         }
         return new Result<LoginUser>(loginUser);
     }
+
+
+    @GetMapping(value = {"/logout"})
+    public Result<String> logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return new Result<String>("SUCCEED");
+    }
 }
