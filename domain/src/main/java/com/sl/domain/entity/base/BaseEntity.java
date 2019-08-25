@@ -18,6 +18,8 @@ public class BaseEntity {
     private Long id;
     @ApiModelProperty(value = "名称")
     private String name;
+    @ApiModelProperty(value = "编码")
+    private String code;
     @ApiModelProperty(value = "数据状态")
     private Integer rowSts;
     @ApiModelProperty(value = "描述")
@@ -45,6 +47,14 @@ public class BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDescription() {
