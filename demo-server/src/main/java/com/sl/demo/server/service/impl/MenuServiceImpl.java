@@ -5,6 +5,7 @@ import com.sl.demo.server.repository.MenuRepository;
 import com.sl.demo.server.service.MenuService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.Menu;
+import com.sl.domain.enums.RowSts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,6 +17,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -25,6 +28,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public void save(Menu menu) {
+        menu.setRowSts(RowSts.EFFECTIVE.getId());
         menuRepository.save(menu);
     }
 
@@ -36,7 +40,15 @@ public class MenuServiceImpl implements MenuService {
     public Pagination<Menu> findPage(Pagination<Menu> pagination) {
         Page<Menu> page = menuRepository.findAll(pagination);
         pagination.setTotalRecords(page.getTotalElements());
-        pagination.setData(page.getContent());
+        List<Menu> datas = page.getContent();
+        List<String> codeList = datas.stream().map(Menu::getParent).collect(Collectors.toList());
+        codeList = codeList.stream().filter(o-> null != o).collect(Collectors.toList());
+        List<Menu> parents = findByCodes(codeList);
+        Map<String, Menu> parentsMap = parents.stream().collect(Collectors.toMap(Menu::getCode,o->o));
+        datas.forEach(o->{
+            o.setParentDto(parentsMap.get(o.getParent()));
+        });
+        pagination.setData(datas);
         return pagination;
     }
 
@@ -50,6 +62,10 @@ public class MenuServiceImpl implements MenuService {
         for (Long tempId : id){
             menuRepository.delete(tempId);
         }
+    }
+
+    private List<Menu> findByCodes(List<String> codeList){
+        return menuRepository.findByCodes(codeList);
     }
 
     @Override
