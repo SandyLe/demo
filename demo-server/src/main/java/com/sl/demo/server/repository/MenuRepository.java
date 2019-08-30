@@ -13,4 +13,6 @@ public interface MenuRepository extends JpaRepository<Menu,Long>, JpaSpecificati
 
     @Query("select u from Menu u where (u.code in (?1)) and u.rowSts = 10")
     List<Menu> findByCodes(List<String> codeList);
+
+    Menu findByCode(String cocde);
 }

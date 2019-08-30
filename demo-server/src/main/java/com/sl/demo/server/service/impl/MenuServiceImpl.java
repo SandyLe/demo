@@ -6,6 +6,7 @@ import com.sl.demo.server.service.MenuService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.Menu;
 import com.sl.domain.enums.RowSts;
+import org.apache.shiro.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,6 +30,8 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void save(Menu menu) {
         menu.setRowSts(RowSts.EFFECTIVE.getId());
+        Menu exist = findByCode(menu.getCode());
+        Assert.isNull(exist, "编号已存在！");
         menuRepository.save(menu);
     }
 
@@ -66,6 +69,10 @@ public class MenuServiceImpl implements MenuService {
 
     private List<Menu> findByCodes(List<String> codeList){
         return menuRepository.findByCodes(codeList);
+    }
+
+    private Menu findByCode(String code){
+        return menuRepository.findByCode(code);
     }
 
     @Override
