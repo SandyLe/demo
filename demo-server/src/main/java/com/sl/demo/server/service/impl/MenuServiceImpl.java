@@ -6,6 +6,7 @@ import com.sl.demo.server.service.MenuService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.Menu;
 import com.sl.domain.enums.RowSts;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,11 +47,13 @@ public class MenuServiceImpl implements MenuService {
         List<Menu> datas = page.getContent();
         List<String> codeList = datas.stream().map(Menu::getParent).collect(Collectors.toList());
         codeList = codeList.stream().filter(o-> null != o).collect(Collectors.toList());
-        List<Menu> parents = findByCodes(codeList);
-        Map<String, Menu> parentsMap = parents.stream().collect(Collectors.toMap(Menu::getCode,o->o));
-        datas.forEach(o->{
-            o.setParentDto(parentsMap.get(o.getParent()));
-        });
+        if(CollectionUtils.isNotEmpty(codeList)){
+            List<Menu> parents = findByCodes(codeList);
+            Map<String, Menu> parentsMap = parents.stream().collect(Collectors.toMap(Menu::getCode,o->o));
+            datas.forEach(o->{
+                o.setParentDto(parentsMap.get(o.getParent()));
+            });
+        }
         pagination.setData(datas);
         return pagination;
     }
