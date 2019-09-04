@@ -26,3 +26,5 @@ wechat:
   secret: 4d0e0de5a0fb3d0a3ad19bfab4675899
   grantType: authorization_code
   sessionHost: https://api.weixin.qq.com/sns/jscode2session
+upload:
+  path: D:\\upload\\
