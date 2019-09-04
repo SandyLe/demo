@@ -35,6 +35,10 @@ public class PicController {
     @PostMapping(value = {"/pic/upload"})
     public String upload(@RequestParam(required = true, value = "multipartFiles") MultipartFile[] multipartFiles, @RequestParam(required = false, value = "albumCode")String albumCode) {
 
+        File path = new File(uploadPath);
+        if(!path.exists()){
+            path.mkdir();
+        }
         if(null != multipartFiles && multipartFiles.length > 0){
             for(MultipartFile multipartFile : multipartFiles){
                 File file = new File(uploadPath + multipartFile.getOriginalFilename());
