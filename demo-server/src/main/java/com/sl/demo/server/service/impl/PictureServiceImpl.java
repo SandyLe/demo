@@ -6,7 +6,16 @@ import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.Picture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PictureServiceImpl implements PictureService {
@@ -39,4 +48,27 @@ public class PictureServiceImpl implements PictureService {
         }
     }
 
+    @Override
+    public List<Picture> findList(Integer rowSts, String albumCode) {
+        Specification<Picture> specification = new Specification<Picture>() {
+            @Override
+            public Predicate toPredicate(Root<Picture> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> predicates = new ArrayList<Predicate>();
+                if(null != rowSts){
+                    predicates.add(cb.equal(root.get("rowSts"), rowSts));
+                }
+                if(StringUtils.hasText(albumCode)){
+                    predicates.add(cb.equal(root.get("albumCode"), albumCode));
+                }
+                query.where(predicates.toArray(new Predicate[]{}));
+                return query.getRestriction();
+            }
+        };
+        return pictureRepository.findAll(specification);
+    }
+
+    @Override
+    public List<Picture> findList(Integer rowSts){
+        return findList(rowSts,null);
+    }
 }
