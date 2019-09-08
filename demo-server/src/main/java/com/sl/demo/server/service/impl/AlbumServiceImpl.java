@@ -7,6 +7,7 @@ import com.sl.demo.server.service.GoalService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.Album;
 import com.sl.domain.entity.Goal;
+import com.sl.domain.enums.RowSts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,10 @@ public class AlbumServiceImpl implements AlbumService {
         for(Long tempId : id){
             albumRepository.delete(tempId);
         }
+    }
+
+    @Override
+    public List<Album> findList(){
+        return albumRepository.findList(RowSts.EFFECTIVE.getId());
     }
 }

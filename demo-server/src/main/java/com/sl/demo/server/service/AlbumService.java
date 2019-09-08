@@ -16,4 +16,6 @@ public interface AlbumService {
     List<Album> findByCodes(List<String> codes);
 
     void delete(Long[] id);
+
+    List<Album> findList();
 }

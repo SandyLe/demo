@@ -5,11 +5,13 @@ import com.sl.demo.server.util.LoginUtils;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.dto.util.Result;
 import com.sl.domain.entity.Album;
+import com.sl.domain.enums.RowSts;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @Api(value = "AlbumController", description = "图册管理")
@@ -21,6 +23,7 @@ public class AlbumController {
     @PostMapping(value = {"/album/save"})
     public Result<Long> save(@RequestBody Album album){
         if(null == album.getId()){
+            album.setRowSts(RowSts.EFFECTIVE.getId());
             album.setCreateUserId(LoginUtils.getLoginUser().getId());
             album.setCreateDate(new Date());
         }
@@ -46,5 +49,10 @@ public class AlbumController {
     public Result<Long[]> delete(Long[] id){
         albumService.delete(id);
         return new Result<Long[]> (id);
+    }
+
+    @GetMapping(value = {"/album/getList"})
+    public Result<List<Album>> getList(){
+        return new Result<List<Album>>(albumService.findList());
     }
 }
