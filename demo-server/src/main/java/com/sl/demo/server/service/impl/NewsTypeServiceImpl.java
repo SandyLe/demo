@@ -45,6 +45,6 @@ public class NewsTypeServiceImpl implements NewsTypeService {
 
     @Override
     public List<NewsType> findList(List<String> codeList) {
-        return null;
+        return newsTypeRepository.findList(codeList);
     }
 }

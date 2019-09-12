@@ -14,5 +14,5 @@ public interface NewsService {
 
     Pagination<News> findPage(Pagination<News> pagination);
 
-    List<News> findList(String newsTypeCode);
+    List<News> findList(String newsTypeCode, Integer rowSts, Integer topN);
 }
