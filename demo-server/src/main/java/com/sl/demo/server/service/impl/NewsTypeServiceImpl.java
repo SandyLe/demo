@@ -47,4 +47,11 @@ public class NewsTypeServiceImpl implements NewsTypeService {
     public List<NewsType> findList(List<String> codeList) {
         return newsTypeRepository.findList(codeList);
     }
+
+    @Override
+    public void delete(Long[] id) {
+        for (Long tempId: id) {
+            newsTypeRepository.delete(tempId);
+        }
+    }
 }

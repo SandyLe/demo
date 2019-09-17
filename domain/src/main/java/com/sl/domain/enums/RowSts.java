@@ -7,6 +7,7 @@ public enum RowSts {
 
     NEW(5,"new"),//新增
     EFFECTIVE(10,"effective"),//有效
+    DISABLE(20,"disable"),//有效
     DELETE(0,"delete");//删除
     private Integer id;
     private String name;

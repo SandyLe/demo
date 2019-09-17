@@ -14,4 +14,6 @@ public interface NewsTypeService {
     Pagination<NewsType> findPage(Pagination<NewsType> pagination);
 
     List<NewsType> findList(List<String> codeList);
+
+    void delete(Long[] id);
 }

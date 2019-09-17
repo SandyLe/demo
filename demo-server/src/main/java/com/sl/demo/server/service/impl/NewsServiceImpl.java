@@ -5,8 +5,10 @@ import com.sl.demo.server.repository.NewsRepository;
 import com.sl.demo.server.repository.NewsTypeRepository;
 import com.sl.demo.server.service.NewsService;
 import com.sl.demo.server.util.LoginUtils;
+import com.sl.domain.dto.NewsPagination;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.News;
+import com.sl.domain.entity.NewsType;
 import com.sl.domain.enums.RowSts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,8 +23,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -51,8 +56,29 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Pagination<News> findPage(Pagination<News> pagination) {
-        return null;
+    public NewsPagination findPage(NewsPagination pagination) {
+        Specification<News> specification = new Specification<News>() {
+            @Override
+            public Predicate toPredicate(Root<News> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> predicates = Lists.newArrayList();
+                if(StringUtils.hasText(pagination.getNewsTypeCode())){
+                    predicates.add(cb.equal(root.get("newsTypeCode"), pagination.getNewsTypeCode()));
+                }
+                query.where(predicates.toArray(new Predicate[]{}));
+                return query.getRestriction();
+            }
+        };
+
+        Page<News> pageData = newsRepository.findAll(specification, pagination);
+        List<News> data = pageData.getContent();
+        List<String> codeList = data.stream().map(News::getNewsTypeCode).collect(Collectors.toList());
+        List<NewsType> typeList = newsTypeRepository.findList(codeList);
+        Map<String, NewsType> typeMap = typeList.stream().collect(Collectors.toMap(o -> o.getCode(), o->o));
+        data.stream().forEach(o->{o.setNewsType(typeMap.get(o.getNewsTypeCode()));});
+        pagination.setData(data);
+        pagination.setTotalRecords(pageData.getTotalElements());
+        return pagination;
+
     }
 
     @Override
@@ -73,6 +99,25 @@ public class NewsServiceImpl implements NewsService {
         };
         Pageable pageable = new PageRequest(0, topN, new Sort(Sort.Direction.DESC, "updateDate"));
         Page<News> newsPage = newsRepository.findAll(specification, pageable);
-        return newsPage.getContent();
+        List<News> data = newsPage.getContent();
+        List<String> codeList = data.stream().map(News::getNewsTypeCode).collect(Collectors.toList());
+        List<NewsType> typeList = newsTypeRepository.findList(codeList);
+        Map<String, NewsType> typeMap = typeList.stream().collect(Collectors.toMap(o -> o.getCode(), o->o));
+        data.stream().forEach(o->{o.setNewsType(typeMap.get(o.getNewsTypeCode()));});
+        return data;
+    }
+
+    @Override
+    public void delete(Long[] id){
+        for (Long tempId: id){
+            newsRepository.delete(tempId);
+        }
+    }
+
+    @Override
+    public void updateSts(Long id, Integer rowSts) {
+        News news = findById(id);
+        news.setRowSts(rowSts);
+        newsRepository.save(news);
     }
 }

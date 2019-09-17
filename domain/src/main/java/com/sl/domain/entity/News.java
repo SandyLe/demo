@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "sl_news")
@@ -16,6 +17,9 @@ public class News extends BaseEntity {
     private String newsTypeCode;
     @ApiModelProperty(value = "内容")
     private String content;
+
+    @Transient
+    private NewsType newsType;
 
     public String getNewsTypeCode() {
         return newsTypeCode;
@@ -31,5 +35,13 @@ public class News extends BaseEntity {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public NewsType getNewsType() {
+        return newsType;
+    }
+
+    public void setNewsType(NewsType newsType) {
+        this.newsType = newsType;
     }
 }
