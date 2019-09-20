@@ -13,7 +13,7 @@ public interface NewsTypeService {
 
     Pagination<NewsType> findPage(Pagination<NewsType> pagination);
 
-    List<NewsType> findList(List<String> codeList);
+    List<NewsType> findList(List<String> codeList, Integer rowSts);
 
     void delete(Long[] id);
 }

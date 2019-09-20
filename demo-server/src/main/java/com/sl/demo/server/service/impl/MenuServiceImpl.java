@@ -86,7 +86,7 @@ public class MenuServiceImpl implements MenuService {
                 List<Predicate> list = Lists.newArrayList();
                 if(StringUtils.hasText(level)){
                     list.add(cb.equal(root.get("level"),level));
-            }
+                }
                 if(StringUtils.hasText(parent)){
                     list.add(cb.equal(root.get("parent"),parent));
                 }
