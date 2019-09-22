@@ -1,6 +1,7 @@
 package com.sl.demo.server.controller;
 
 import com.sl.demo.server.service.MenuService;
+import com.sl.domain.dto.MenuDto;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.dto.util.Result;
 import com.sl.domain.entity.Menu;
@@ -43,5 +44,11 @@ public class MenuController {
     public Result<Long[]> delete(Long[] id){
         menuService.delete(id);
         return new Result<Long[]> (id);
+    }
+
+    @GetMapping(value = {"/fc/menu/getList"})
+    private Result<List<MenuDto>> getList(){
+        List<MenuDto> menuList = menuService.findFcList();
+        return new Result<List<MenuDto>>(menuList);
     }
 }

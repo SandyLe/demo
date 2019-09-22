@@ -1,9 +1,6 @@
 package com.sl.demo.server;
 
-import com.sl.demo.core.configuration.CoreConfig;
-import com.sl.demo.core.configuration.ImgFileConfiguration;
-import com.sl.demo.core.configuration.ShiroConfig;
-import com.sl.demo.core.configuration.Swagger2;
+import com.sl.demo.core.configuration.*;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -17,7 +14,7 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@ImportAutoConfiguration({Swagger2.class, CoreConfig.class, ShiroConfig.class, ImgFileConfiguration.class})
+@ImportAutoConfiguration({Swagger2.class, CoreConfig.class, ShiroConfig.class, ImgFileConfiguration.class, DemoCorsFilter.class})
 @EntityScan(basePackages = {"com.sl.domain.entity"})
 public class DemoServerApplication {
 

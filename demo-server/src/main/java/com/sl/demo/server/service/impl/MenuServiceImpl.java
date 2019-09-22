@@ -3,6 +3,7 @@ package com.sl.demo.server.service.impl;
 import com.google.common.collect.Lists;
 import com.sl.demo.server.repository.MenuRepository;
 import com.sl.demo.server.service.MenuService;
+import com.sl.domain.dto.MenuDto;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.Menu;
 import com.sl.domain.enums.RowSts;
@@ -70,7 +71,8 @@ public class MenuServiceImpl implements MenuService {
         }
     }
 
-    private List<Menu> findByCodes(List<String> codeList){
+    @Override
+    public List<Menu> findByCodes(List<String> codeList){
         return menuRepository.findByCodes(codeList);
     }
 
@@ -97,4 +99,33 @@ public class MenuServiceImpl implements MenuService {
         return menuRepository.findAll(specification);
     }
 
+    @Override
+    public List<MenuDto> findFcList() {
+        List<Menu> levelOneList = findList("1", null);
+        List<MenuDto> dtoList = Lists.newArrayList();
+        levelOneList.forEach(o->{
+            MenuDto dto = new MenuDto();
+            dto.setName(o.getName());
+            dto.setCode(o.getCode());
+            dto.setChildren(getChildren(o.getCode()));
+            dtoList.add(dto);
+        });
+        return dtoList;
+    }
+
+    private List<MenuDto> getChildren (String parentId){
+
+        List<Menu> dataList = findList(null, parentId);
+        List<MenuDto> dtoList = Lists.newArrayList();
+        for (Menu menu : dataList) {
+            MenuDto dto = new MenuDto();
+            dto.setCode(menu.getCode());
+            dto.setName(menu.getName());
+            if(StringUtils.hasText(menu.getCode())){
+                dto.setChildren(getChildren(menu.getCode()));
+            }
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
 }

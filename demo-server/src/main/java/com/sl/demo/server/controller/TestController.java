@@ -3,6 +3,7 @@ package com.sl.demo.server.controller;
 import com.sl.demo.core.utils.SpringUtils;
 import com.sl.demo.server.service.PositionService;
 import com.sl.demo.server.service.UserService;
+import com.sl.domain.dto.util.Result;
 import com.sl.domain.entity.Position;
 import com.sl.domain.entity.User;
 import io.swagger.annotations.Api;
@@ -27,7 +28,7 @@ public class TestController {
 
     @ApiOperation(value = "测试",notes = "Test")
     @GetMapping(value = {"/test/test"})
-    public String test() {
+    public Result<String> test() {
 
         Long t1 = System.currentTimeMillis();
         Position position = new Position();
@@ -51,7 +52,7 @@ public class TestController {
         user.setPositions(positions);
 //        userService.save(user);
         System.out.println(System.currentTimeMillis()-t1);
-        return "hello word1!" + user.getName() + position.getName() + "测试环境搭建完善";
+        return new Result<String>("hello word1!" + user.getName() + position.getName() + "测试环境搭建完善");
     }
 
     @ApiOperation(value = "测试",notes = "Test")

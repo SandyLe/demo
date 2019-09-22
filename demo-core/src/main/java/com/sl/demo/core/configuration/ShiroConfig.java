@@ -45,6 +45,7 @@ public class ShiroConfig {
         chainMap.put("/login.jsp","anon");
         chainMap.put("/image/**", "anon");
         chainMap.put("/test/**", "anon");
+        chainMap.put("/fc/**", "anon");
         chainMap.put("/static/**", "anon");
         chainMap.put("/login", "anon");
         chainMap.put("/wechat/auth", "anon");

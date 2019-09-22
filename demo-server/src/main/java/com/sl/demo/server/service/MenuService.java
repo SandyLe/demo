@@ -1,5 +1,6 @@
 package com.sl.demo.server.service;
 
+import com.sl.domain.dto.MenuDto;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.Menu;
 
@@ -11,4 +12,6 @@ public interface MenuService {
     Menu findById(Long id);
     void delete(Long[] id);
     List<Menu> findList(String level, String parent);
+    List<Menu> findByCodes(List<String> codeList);
+    List<MenuDto> findFcList();
 }

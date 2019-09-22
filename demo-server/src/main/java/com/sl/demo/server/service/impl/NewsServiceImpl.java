@@ -10,6 +10,7 @@ import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.News;
 import com.sl.domain.entity.NewsType;
 import com.sl.domain.enums.RowSts;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,7 +73,11 @@ public class NewsServiceImpl implements NewsService {
         Page<News> pageData = newsRepository.findAll(specification, pagination);
         List<News> data = pageData.getContent();
         List<String> codeList = data.stream().map(News::getNewsTypeCode).collect(Collectors.toList());
-        List<NewsType> typeList = newsTypeRepository.findList(codeList);
+        codeList = codeList.stream().filter(o->StringUtils.hasText(o)).collect(Collectors.toList());
+        List<NewsType> typeList = Lists.newArrayList();
+        if(CollectionUtils.isNotEmpty(codeList)){
+            typeList = newsTypeRepository.findList(codeList);
+        }
         Map<String, NewsType> typeMap = typeList.stream().collect(Collectors.toMap(o -> o.getCode(), o->o));
         data.stream().forEach(o->{o.setNewsType(typeMap.get(o.getNewsTypeCode()));});
         pagination.setData(data);
