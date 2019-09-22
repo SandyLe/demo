@@ -33,7 +33,7 @@ public class MenuServiceImpl implements MenuService {
     public void save(Menu menu) {
         menu.setRowSts(RowSts.EFFECTIVE.getId());
         Menu exist = findByCode(menu.getCode());
-        Assert.isNull(exist, "编号已存在！");
+        Assert.isTrue(!(null != exist && exist.getId() != menu.getId()), "编号已存在！");
         menuRepository.save(menu);
     }
 
@@ -93,6 +93,7 @@ public class MenuServiceImpl implements MenuService {
                     list.add(cb.equal(root.get("parent"),parent));
                 }
                 query.where(list.toArray(new Predicate[]{}));
+                query.orderBy(cb.asc(root.get("weight")));
                 return query.getRestriction();
             }
         };

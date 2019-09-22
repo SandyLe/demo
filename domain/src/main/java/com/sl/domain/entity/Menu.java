@@ -23,6 +23,9 @@ public class Menu extends BaseEntity {
     @ApiModelProperty(value = "类型")
     private Integer type;
 
+    @ApiModelProperty(value = "排序")
+    private Integer weight;
+
     @Transient
     private Menu parentDto;
 
@@ -64,5 +67,13 @@ public class Menu extends BaseEntity {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 }
