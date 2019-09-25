@@ -108,6 +108,7 @@ public class MenuServiceImpl implements MenuService {
             MenuDto dto = new MenuDto();
             dto.setName(o.getName());
             dto.setCode(o.getCode());
+            dto.setUrl(o.getUrl());
             dto.setChildren(getChildren(o.getCode()));
             dtoList.add(dto);
         });

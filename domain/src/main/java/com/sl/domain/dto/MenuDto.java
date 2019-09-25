@@ -2,6 +2,7 @@ package com.sl.domain.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -12,6 +13,9 @@ public class MenuDto {
 
     @ApiModelProperty(value = "编号")
     private String code;
+
+    @ApiModelProperty(value = "URL")
+    private String url;
 
     @ApiModelProperty(value = "子菜单")
     private List<MenuDto> children;
@@ -38,5 +42,20 @@ public class MenuDto {
 
     public void setChildren(List<MenuDto> children) {
         this.children = children;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Boolean getIsOutSite(){
+        if(StringUtils.hasText(getUrl())){
+            return getUrl().startsWith("http");
+        }
+        return false;
     }
 }
