@@ -123,6 +123,7 @@ public class MenuServiceImpl implements MenuService {
             MenuDto dto = new MenuDto();
             dto.setCode(menu.getCode());
             dto.setName(menu.getName());
+            dto.setUrl(menu.getUrl());
             if(StringUtils.hasText(menu.getCode())){
                 dto.setChildren(getChildren(menu.getCode()));
             }

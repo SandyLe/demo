@@ -93,4 +93,15 @@ public class PicController {
         result.setData(dtoList);
         return result;
     }
+    @ApiOperation(value = "根据图册获取图片",notes = "根据图册获取图片")
+    @GetMapping(value = {"/fc/pic/getList"})
+    public Result<Set<String>> getPics(@RequestParam(value = "albumCode", required = false) String albumCode,
+                                        @RequestParam(value = "limit", required = false) Integer limit){
+        List<Picture> pictures = pictureService.findList(RowSts.EFFECTIVE.getId(), albumCode);
+        if(null != limit && pictures.size() > limit){
+            pictures = pictures.subList(0, limit);
+        }
+        Set<String> urls = pictures.stream().collect(Collectors.toMap(o->o.getUrl(), o->o)).keySet();
+        return new Result<Set<String>>(urls);
+    }
 }
