@@ -108,7 +108,7 @@ public class MenuServiceImpl implements MenuService {
             MenuDto dto = new MenuDto();
             dto.setName(o.getName());
             dto.setCode(o.getCode());
-            dto.setUrl(o.getUrl());
+            dto.setUrl(null != o.getUrl() ? o.getUrl() : "");
             dto.setChildren(getChildren(o.getCode()));
             dtoList.add(dto);
         });
@@ -123,7 +123,7 @@ public class MenuServiceImpl implements MenuService {
             MenuDto dto = new MenuDto();
             dto.setCode(menu.getCode());
             dto.setName(menu.getName());
-            dto.setUrl(menu.getUrl());
+            dto.setUrl(null != menu.getUrl() ? menu.getUrl() : "");
             if(StringUtils.hasText(menu.getCode())){
                 dto.setChildren(getChildren(menu.getCode()));
             }

@@ -22,6 +22,17 @@ public class Product extends BaseEntity {
     @ApiModelProperty("主图URL")
     private String imgUrl;
 
+    @ApiModelProperty("商铺URL")
+    private String shopUrl;
+
+    public String getShopUrl() {
+        return shopUrl;
+    }
+
+    public void setShopUrl(String shopUrl) {
+        this.shopUrl = shopUrl;
+    }
+
     public String getImgUrl() {
         return imgUrl;
     }

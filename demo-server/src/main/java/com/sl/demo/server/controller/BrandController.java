@@ -4,12 +4,12 @@ import com.sl.demo.server.service.BrandService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.dto.util.Result;
 import com.sl.domain.entity.Brand;
+import com.sl.domain.enums.RowSts;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Api(value = "BrandController", description = "品牌接口")
@@ -27,6 +27,12 @@ public class BrandController {
     public Result<Pagination> getPage(Pagination pagination){
         pagination = brandService.findPage(pagination);
         return new Result<Pagination> (pagination);
+    }
+    @GetMapping(value = {"/brand/getList"})
+    public Result<List<Brand>> getList(@RequestParam(value = "rowSts", required = false)Integer rowSts){
+        rowSts = null == rowSts ? RowSts.EFFECTIVE.getId() : rowSts;
+        List<Brand> brands = brandService.findList(null, rowSts);
+        return new Result<List<Brand>> (brands);
     }
     @GetMapping(value = {"/brand/getOne"})
     public Result<Brand> getOne(Long id){
