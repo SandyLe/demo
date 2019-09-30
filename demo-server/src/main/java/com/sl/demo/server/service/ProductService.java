@@ -10,5 +10,5 @@ public interface ProductService {
     Pagination<Product> findPage(Pagination<Product> pagination);
     Product findById(Long id);
     void delete(Long[] id);
-    List<Product> findList(List<String> codes, Integer rowSts);
+    List<Product> findList(List<String> codes, String brandCode, Integer rowSts);
 }

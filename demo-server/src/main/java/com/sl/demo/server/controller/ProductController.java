@@ -4,12 +4,12 @@ import com.sl.demo.server.service.ProductService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.dto.util.Result;
 import com.sl.domain.entity.Product;
+import com.sl.domain.enums.RowSts;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Api(value = "ProductController", description = "热销产品接口")
@@ -39,4 +39,11 @@ public class ProductController {
         productService.delete(id);
         return new Result<Long[]> (id);
     }
+
+    @GetMapping(value = {"/product/getList"})
+    public Result<List<Product>> getList(@RequestParam(value = "brandCode") String brandCode){
+        List<Product> productList = productService.findList(null, brandCode, RowSts.EFFECTIVE.getId());
+        return new Result<List<Product>> (productList);
+    }
+
 }

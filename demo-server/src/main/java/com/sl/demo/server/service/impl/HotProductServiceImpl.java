@@ -49,7 +49,7 @@ public class HotProductServiceImpl implements HotProductService {
         pagination.setTotalRecords(page.getTotalElements());
         List<HotProduct> datas = page.getContent();
         List<String> proCodes = datas.stream().map(HotProduct::getProductCode).collect(Collectors.toList());
-        List<Product> products = productService.findList(proCodes, RowSts.EFFECTIVE.getId());
+        List<Product> products = productService.findList(proCodes, null, RowSts.EFFECTIVE.getId());
         List<String> brandCodes = products.stream().map(Product::getBrandCode).collect(Collectors.toList());
         List<Brand> brands = brandService.findList(brandCodes, RowSts.EFFECTIVE.getId());
         Map<String, Brand> brandMap = brands.stream().collect(Collectors.toMap(Brand::getCode,o->o));

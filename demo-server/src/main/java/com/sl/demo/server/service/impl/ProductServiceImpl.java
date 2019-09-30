@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -68,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findList(List<String> codes, Integer rowSts) {
+    public List<Product> findList(List<String> codes, String brandCode, Integer rowSts) {
 
         Specification specification = new Specification() {
             @Override
@@ -76,6 +77,9 @@ public class ProductServiceImpl implements ProductService {
                 List<Predicate> predicates = Lists.newArrayList();
                 if(CollectionUtils.isNotEmpty(codes)){
                     predicates.add(root.<String>get("code").in(codes));
+                }
+                if(StringUtils.hasText(brandCode)){
+                    predicates.add(cb.equal(root.get("brandCode"), brandCode));
                 }
                 predicates.add(cb.equal(root.get("rowSts"),rowSts));
                 query.where(predicates.toArray(new Predicate[]{}));
