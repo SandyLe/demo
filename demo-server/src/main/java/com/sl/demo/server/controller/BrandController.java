@@ -28,7 +28,7 @@ public class BrandController {
         pagination = brandService.findPage(pagination);
         return new Result<Pagination> (pagination);
     }
-    @GetMapping(value = {"/brand/getList"})
+    @GetMapping(value = {"/brand/getList", "/fc/brand/getList"})
     public Result<List<Brand>> getList(@RequestParam(value = "rowSts", required = false)Integer rowSts){
         rowSts = null == rowSts ? RowSts.EFFECTIVE.getId() : rowSts;
         List<Brand> brands = brandService.findList(null, rowSts);

@@ -11,6 +11,7 @@ import com.sl.domain.entity.Product;
 import com.sl.domain.enums.RowSts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -70,5 +71,17 @@ public class HotProductServiceImpl implements HotProductService {
         for (Long tempId : id){
             hotProductRepository.delete(tempId);
         }
+    }
+
+    @Override
+    public List<Product> findTopList(Integer top) {
+        Pagination<HotProduct> pagination = new Pagination<HotProduct>();
+        pagination.setColumn("weight");
+        pagination.setPageSize(top);
+        pagination.setOrder(Sort.Direction.ASC.name());
+        Page<HotProduct> page = hotProductRepository.findAll(pagination);
+        List<String> productCodes = page.getContent().stream().map(HotProduct::getProductCode).collect(Collectors.toList());
+        List<Product> products = productService.findList(productCodes, null, RowSts.EFFECTIVE.getId());
+        return products;
     }
 }
