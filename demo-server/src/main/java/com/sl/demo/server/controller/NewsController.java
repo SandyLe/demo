@@ -24,12 +24,13 @@ public class NewsController {
         newsService.save(news);
         return new Result<Long>(news.getId());
     }
-    @GetMapping(value = {"/news/getPage"})
+    @GetMapping(value = {"/news/getPage", "/fc/news/getPage"})
     public Result<NewsPagination> getPage(NewsPagination pagination){
         pagination = newsService.findPage(pagination);
         return new Result<NewsPagination> (pagination);
     }
-    @GetMapping(value = {"/news/getOne"})
+
+    @GetMapping(value = {"/news/getOne", "/fc/news/getOne"})
     public Result<News> getOne(Long id){
         News news = newsService.findById(id);
         return new Result<News> (news);

@@ -4,6 +4,7 @@ import com.sl.demo.server.service.MenuNewsTypeService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.dto.util.Result;
 import com.sl.domain.entity.Brand;
+import com.sl.domain.entity.Menu;
 import com.sl.domain.entity.relation.MenuNewsType;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @Api(value = "BrandController", description = "菜单文章类型接口")
@@ -39,5 +42,11 @@ public class MenuNewsTypeController {
     public Result<Long[]> delete(Long[] id){
         menuNewsTypeService.delete(id);
         return new Result<Long[]> (id);
+    }
+
+    @GetMapping(value = {"/fc/menuNewsType/getPath"})
+    public Result<List<String>> getPath(String newsType){
+        List<String> paths = menuNewsTypeService.getPath(newsType);
+        return new Result<List<String>> (paths);
     }
 }

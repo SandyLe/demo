@@ -10,10 +10,13 @@ import com.sl.domain.entity.Menu;
 import com.sl.domain.entity.NewsType;
 import com.sl.domain.entity.relation.MenuNewsType;
 import com.sl.domain.enums.RowSts;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -71,5 +74,31 @@ public class MenuNewsTypeServiceImpl implements MenuNewsTypeService {
         for (Long tempId : id){
             menuNewsTypeRepository.delete(tempId);
         }
+    }
+
+    @Override
+    public List<String> getPath(String newsType) {
+        List<String> menus = Lists.newArrayList();
+        MenuNewsType menuNewsType = menuNewsTypeRepository.findByNewsType(newsType);
+        if(null != menuNewsType){
+            List<Menu> menuList = menuService.findByCodes(Lists.newArrayList(menuNewsType.getMenuCode()));
+            if(CollectionUtils.isNotEmpty(menuList)){
+                menus.add(menuList.get(0).getName());
+                getParentMenus(menuList.get(0), menus);
+            }
+        }
+        Collections.reverse(menus);
+        return menus;
+    }
+
+    private List<String> getParentMenus (Menu menu, List<String> menuNames){
+        if(null != menu && StringUtils.hasText(menu.getParent())){
+            List<Menu> menus = menuService.findByCodes(Lists.newArrayList(menu.getParent()));
+            if(CollectionUtils.isNotEmpty(menus)){
+                menuNames.add(menus.get(0).getName());
+                getParentMenus(menus.get(0), menuNames);
+            }
+        }
+        return menuNames;
     }
 }

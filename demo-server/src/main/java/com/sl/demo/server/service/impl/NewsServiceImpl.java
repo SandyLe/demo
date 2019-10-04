@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,7 +81,22 @@ public class NewsServiceImpl implements NewsService {
             typeList = newsTypeRepository.findList(codeList);
         }
         Map<String, NewsType> typeMap = typeList.stream().collect(Collectors.toMap(o -> o.getCode(), o->o));
-        data.stream().forEach(o->{o.setNewsType(typeMap.get(o.getNewsTypeCode()));});
+        data.stream().forEach(o->{
+            o.setNewsType(typeMap.get(o.getNewsTypeCode()));
+            String content = o.getContent();
+            List<String> imgUrls = getPics(content);
+            content = imgUrls.remove(imgUrls.size() -1 );
+            if(!StringUtils.hasText(o.getMainImgUrl())){
+                if(imgUrls.size() > 0 ){
+                    int imgNum = 0;
+                    if(null != o.getMainImgNum() && o.getMainImgNum() <= imgUrls.size()){
+                        imgNum = o.getMainImgNum();
+                    }
+                    o.setMainImgUrl(imgUrls.get(0 == imgNum ? 0 : imgNum-1));
+                    o.setContent(content);
+                }
+            }
+        });
         pagination.setData(data);
         pagination.setTotalRecords(pageData.getTotalElements());
         return pagination;
@@ -124,5 +141,32 @@ public class NewsServiceImpl implements NewsService {
         News news = findById(id);
         news.setRowSts(rowSts);
         newsRepository.save(news);
+    }
+
+    private List<String> getPics(String content){
+
+        List<String> pics = Lists.newArrayList();
+        if(StringUtils.hasText(content)){
+            String regEx_img = "<img.*src\\s*=\\s*(.*?)[^>]*?>";
+            Pattern pattern  = Pattern.compile(regEx_img, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(content);
+            String img = "";
+            while (matcher.find()) {
+                img = img + "," + matcher.group();
+
+                Pattern patternImg = Pattern.compile("<img.*?>");
+                Matcher matcherImg = patternImg.matcher(img);
+                while (matcherImg.find()){
+                    content = content.replace(matcherImg.group(),"");
+                }
+
+                Matcher m = Pattern.compile("src\\s*=\\s*\"?(.*?)(\"|>|\\s+)").matcher(img);
+                while (m.find()) {
+                    pics.add(m.group(1));
+                }
+            }
+        }
+        pics.add(content);
+        return pics;
     }
 }

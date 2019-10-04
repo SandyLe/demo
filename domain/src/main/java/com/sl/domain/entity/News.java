@@ -17,6 +17,10 @@ public class News extends BaseEntity {
     private String newsTypeCode;
     @ApiModelProperty(value = "内容")
     private String content;
+    @ApiModelProperty(value = "内容")
+    private Integer mainImgNum;
+    @ApiModelProperty(value = "内容")
+    private String mainImgUrl;
 
     @Transient
     private NewsType newsType;
@@ -43,5 +47,21 @@ public class News extends BaseEntity {
 
     public void setNewsType(NewsType newsType) {
         this.newsType = newsType;
+    }
+
+    public Integer getMainImgNum() {
+        return mainImgNum;
+    }
+
+    public void setMainImgNum(Integer mainImgNum) {
+        this.mainImgNum = mainImgNum;
+    }
+
+    public String getMainImgUrl() {
+        return mainImgUrl;
+    }
+
+    public void setMainImgUrl(String mainImgUrl) {
+        this.mainImgUrl = mainImgUrl;
     }
 }
