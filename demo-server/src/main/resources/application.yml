@@ -33,4 +33,4 @@ wechat:
   sessionHost: https://api.weixin.qq.com/sns/jscode2session
 upload:
   path: D:\\upload\\
-  webPath: /upload/
+  webPath: http://localhost:8081/demo/api/upload/
