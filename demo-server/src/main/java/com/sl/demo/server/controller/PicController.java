@@ -86,7 +86,12 @@ public class PicController {
         for(Map.Entry<String,List<Picture>> entry : map.entrySet()){
             PicDto dto = new PicDto();
             dto.setAlbum(albumMap.get(entry.getKey()));
-            List<String> urls = entry.getValue().stream().map(x->x.getUrl().replace(".","-thumbnail.")).collect(Collectors.toList());
+            List<String> tempUrls = entry.getValue().stream().map(x->x.getUrl()).collect(Collectors.toList());
+            List<String> urls = Lists.newArrayList();
+            tempUrls.forEach(o->{
+                int index = o.lastIndexOf(".");
+                urls.add(o.substring(0, index) + "-thumbnail" + o.substring(index));
+            });
             dto.setUrls(urls);
             dtoList.add(dto);
         }
