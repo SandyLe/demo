@@ -16,6 +16,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,18 +30,34 @@ import java.security.MessageDigest;
 @Api(value = "LoginController", description = "登录接口")
 public class LoginController {
 
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Autowired
     private UserService userService;
     @PostMapping(value = {"/login"})
-    public Result<LoginUser> login(@RequestBody UserLoginDto userLoginDto) throws Exception{
+    public Result<LoginUser> login(@RequestBody UserLoginDto userLoginDto) {
+        String errorMsg = null;
         User user = userService.findByName(userLoginDto.getUsername());
-        String password = HMACSHA256.decrypt(userLoginDto.getPassword(), "Password!");
+        if(null ==  user){
+            errorMsg = "用户不存在！";
+        }
+        String password = null;
+        try {
+            password = HMACSHA256.decrypt(userLoginDto.getPassword(), "Password!");
+        } catch (Exception e){
+            errorMsg = "密码解密异常！";
+            logger.info(e.getMessage());
+        }
         password = PasswordHelper.encryptTryPassword(user,password);
         UsernamePasswordToken token = new UsernamePasswordToken(userLoginDto.getUsername(),password);
-        Subject subject = SecurityUtils.getSubject();
-        subject.login(token);
         LoginUser loginUser = new LoginUser();
-        BeanUtils.copyProperties(loginUser, user);
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.login(token);
+            BeanUtils.copyProperties(loginUser, user);
+        } catch (Exception e){
+            errorMsg = "用户名或密码错误";
+            logger.info(e.getMessage());
+        }
         loginUser.setToken(SecurityUtils.getSubject().getSession().getId().toString());
         LoginUtils.getSession().setAttribute(LoginUtils.LOGIN_USER, loginUser);
         return new Result<LoginUser>(loginUser);
