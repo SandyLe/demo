@@ -1,10 +1,13 @@
 package com.sl.demo.server.controller;
 
+import com.google.common.collect.Lists;
 import com.sl.demo.server.service.HotProductService;
+import com.sl.demo.server.service.ProductService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.dto.util.Result;
 import com.sl.domain.entity.HotProduct;
 import com.sl.domain.entity.Product;
+import com.sl.domain.enums.RowSts;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,9 @@ public class HotProductController {
 
     @Autowired
     private HotProductService hotProductService;
+
+    @Autowired
+    private ProductService productService;
 
     @PostMapping(value = {"/hotProduct/save"})
     public Result<Long> save(@RequestBody HotProduct hotProduct){
@@ -31,6 +37,8 @@ public class HotProductController {
     @GetMapping(value = {"/hotProduct/getOne"})
     public Result<HotProduct> getOne(Long id){
         HotProduct hotProduct = hotProductService.findById(id);
+        List<Product> products = productService.findList(Lists.newArrayList(hotProduct.getProductCode()), null, RowSts.EFFECTIVE.getId());
+        hotProduct.setProduct(products.size()>0 ? products.get(0) : null);
         return new Result<HotProduct> (hotProduct);
     }
 

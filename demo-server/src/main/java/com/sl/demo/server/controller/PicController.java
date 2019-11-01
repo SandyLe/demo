@@ -72,6 +72,26 @@ public class PicController {
         return "OK";
     }
 
+    @ApiOperation(value = "删除图片",notes = "删除图片")
+    @PostMapping(value = {"/pic/delete"})
+    public Result<Long> delete(@RequestParam(value = "id", required = false) Long id){
+        Result<Long> result = new Result<Long>();
+        Picture picture = pictureService.findById(id);
+        String url = picture.getUrl();
+        url = uploadPath + url.substring(webPath.length()-1);
+        File smallfile = new File(url);
+        if(smallfile.exists()){
+            smallfile.delete();
+        }
+        url = url.replace("-thumbnail", "");
+        File file = new File(url);
+        if(file.exists()){
+            file.delete();
+        }
+        pictureService.delete(new Long[]{id});
+        result.setData(id);
+        return result;
+    }
 
     @ApiOperation(value = "图片列表",notes = "图片列表")
     @GetMapping(value = {"/pic/getList"})
