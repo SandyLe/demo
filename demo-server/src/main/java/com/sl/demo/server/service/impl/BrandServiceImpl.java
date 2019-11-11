@@ -3,8 +3,11 @@ package com.sl.demo.server.service.impl;
 import com.google.common.collect.Lists;
 import com.sl.demo.server.repository.BrandRepository;
 import com.sl.demo.server.service.BrandService;
+import com.sl.demo.server.service.ProductTypeService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.Brand;
+import com.sl.domain.entity.ProductType;
+import com.sl.domain.enums.RowSts;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,12 +20,17 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class BrandServiceImpl implements BrandService {
 
     @Autowired
     private BrandRepository brandRepository;
+
+    @Autowired
+    private ProductTypeService productTypeService;
 
     @Override
     public void save(Brand brand) {
@@ -37,7 +45,14 @@ public class BrandServiceImpl implements BrandService {
     public Pagination<Brand> findPage(Pagination<Brand> pagination) {
         Page<Brand> page = brandRepository.findAll(pagination);
         pagination.setTotalRecords(page.getTotalElements());
-        pagination.setData(page.getContent());
+        List<Brand> datas = page.getContent();
+        List<String> prodTypeCodes = datas.stream().map(o->o.getProductTypeCode()).collect(Collectors.toList());
+        List<ProductType> productTypes = productTypeService.findList(prodTypeCodes, RowSts.EFFECTIVE.getId());
+        Map<String, ProductType> productTypeMap = productTypes.stream().collect(Collectors.toMap(ProductType::getCode, o->o));
+        datas.stream().forEach(o->{
+            o.setProductType(productTypeMap.get(o.getProductTypeCode()));
+        });
+        pagination.setData(datas);
         return pagination;
     }
 
@@ -69,5 +84,9 @@ public class BrandServiceImpl implements BrandService {
             }
         };
         return brandRepository.findAll(specification);
+    }
+    @Override
+    public List<Brand> findByProductType(String productType){
+        return brandRepository.findByProductType(productType);
     }
 }
