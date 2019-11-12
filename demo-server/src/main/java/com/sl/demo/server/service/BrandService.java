@@ -11,5 +11,6 @@ public interface BrandService {
     Brand findById(Long id);
     void delete(Long[] id);
     List<Brand> findList(List<String> codes, Integer rowSts);
+    List<Brand> findList(List<String> codes, String productTypeCode, Integer rowSts);
     List<Brand> findByProductType(String productType);
 }

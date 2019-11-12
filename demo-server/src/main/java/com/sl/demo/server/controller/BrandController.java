@@ -29,9 +29,10 @@ public class BrandController {
         return new Result<Pagination> (pagination);
     }
     @GetMapping(value = {"/brand/getList", "/fc/brand/getList"})
-    public Result<List<Brand>> getList(@RequestParam(value = "rowSts", required = false)Integer rowSts){
+    public Result<List<Brand>> getList(@RequestParam(value = "rowSts", required = false)Integer rowSts,
+                                       @RequestParam(value = "productTypeCode", required = false)String productTypeCode){
         rowSts = null == rowSts ? RowSts.EFFECTIVE.getId() : rowSts;
-        List<Brand> brands = brandService.findList(null, rowSts);
+        List<Brand> brands = brandService.findList(null, productTypeCode, rowSts);
         return new Result<List<Brand>> (brands);
     }
     @GetMapping(value = {"/brand/getOne"})

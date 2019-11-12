@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -69,7 +70,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public List<Brand> findList(List<String> codeList, Integer rowSts) {
+    public List<Brand> findList(List<String> codeList, String productTypeCode, Integer rowSts) {
 
         Specification<Brand> specification = new Specification<Brand>() {
             @Override
@@ -79,11 +80,21 @@ public class BrandServiceImpl implements BrandService {
                 if(CollectionUtils.isNotEmpty(codeList)){
                     predicates.add(root.<String>get("code").in(codeList));
                 }
+                if(StringUtils.hasText(productTypeCode)){
+                    predicates.add(cb.equal(root.<String>get("productTypeCode"), productTypeCode));
+                }
                 query.where(predicates.toArray(new Predicate[]{}));
+                query.orderBy(cb.desc(root.get("productTypeCode")));
                 return query.getRestriction();
             }
         };
         return brandRepository.findAll(specification);
+    }
+
+    @Override
+    public List<Brand> findList(List<String> codeList, Integer rowSts) {
+
+        return findList(codeList, null, rowSts);
     }
     @Override
     public List<Brand> findByProductType(String productType){
