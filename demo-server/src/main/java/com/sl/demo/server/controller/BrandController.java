@@ -35,7 +35,7 @@ public class BrandController {
         List<Brand> brands = brandService.findList(null, productTypeCode, rowSts);
         return new Result<List<Brand>> (brands);
     }
-    @GetMapping(value = {"/brand/getOne"})
+    @GetMapping(value = {"/brand/getOne", "/fc/brand/getOne"})
     public Result<Brand> getOne(Long id){
         Brand user = brandService.findById(id);
         return new Result<Brand> (user);
