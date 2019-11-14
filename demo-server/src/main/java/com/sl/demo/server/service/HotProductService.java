@@ -11,5 +11,5 @@ public interface HotProductService {
     Pagination<HotProduct> findPage(Pagination<HotProduct> pagination);
     HotProduct findById(Long id);
     void delete(Long[] id);
-    List<Product> findTopList(Integer top);
+    List<Product> findTopList(Integer top, String brandCode);
 }

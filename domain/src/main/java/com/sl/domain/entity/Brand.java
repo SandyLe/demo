@@ -20,6 +20,9 @@ public class Brand extends BaseEntity {
     @ApiModelProperty("产品类型")
     private String productTypeCode;
 
+    @ApiModelProperty("品牌简介")
+    private String introduction;
+
     @Transient
     private ProductType productType;
 
@@ -53,5 +56,13 @@ public class Brand extends BaseEntity {
 
     public void setImgs(String imgs) {
         this.imgs = imgs;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 }

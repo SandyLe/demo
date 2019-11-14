@@ -13,6 +13,9 @@ import javax.persistence.Transient;
 @ApiModel(value = "HotProduct", description = "热销产品")
 public class HotProduct extends BaseEntity {
 
+    @ApiModelProperty("产品品牌Code")
+    private String brandCode;
+
     @ApiModelProperty("产品Code")
     private String productCode;
 
@@ -21,6 +24,25 @@ public class HotProduct extends BaseEntity {
 
     @Transient
     private Product product;
+
+    @Transient
+    private Brand brand;
+
+    public String getBrandCode() {
+        return brandCode;
+    }
+
+    public void setBrandCode(String brandCode) {
+        this.brandCode = brandCode;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
 
     public String getProductCode() {
         return productCode;

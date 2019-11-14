@@ -49,8 +49,8 @@ public class HotProductController {
     }
 
     @GetMapping(value = {"/fc/hotProduct/getList"})
-    public Result<List<Product>> getOne(@RequestParam(value = "top") Integer top){
-        List<Product> hotProducts = hotProductService.findTopList(top);
+    public Result<List<Product>> getOne(@RequestParam(value = "top") Integer top, @RequestParam(value = "brandCode") String brandCode){
+        List<Product> hotProducts = hotProductService.findTopList(top, brandCode);
         return new Result<List<Product>> (hotProducts);
     }
 }
