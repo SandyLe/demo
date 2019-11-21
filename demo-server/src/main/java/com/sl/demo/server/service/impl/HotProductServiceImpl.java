@@ -101,11 +101,14 @@ public class HotProductServiceImpl implements HotProductService {
         pagination.setOrder(Sort.Direction.ASC.name());
         Page<HotProduct> page = hotProductRepository.findAll(specification, pagination);
         List<String> productCodes = page.getContent().stream().map(HotProduct::getProductCode).collect(Collectors.toList());
-        List<Product> products = productService.findList(productCodes, null, RowSts.EFFECTIVE.getId());
-        List<String> brandCodes = products.stream().map(Product::getBrandCode).collect(Collectors.toList());
-        List<Brand> brands = brandService.findList(brandCodes, RowSts.EFFECTIVE.getId());
-        Map<String, Brand> brandMap = brands.stream().collect(Collectors.toMap(Brand::getCode,o->o));
-        products.stream().forEach(o->{o.setBrand(brandMap.get(o.getBrandCode()));});
+        List<Product> products = Lists.newArrayList();
+        if(CollectionUtils.isNotEmpty(productCodes)){
+            products = productService.findList(productCodes, null, RowSts.EFFECTIVE.getId());
+            List<String> brandCodes = products.stream().map(Product::getBrandCode).collect(Collectors.toList());
+            List<Brand> brands = brandService.findList(brandCodes, RowSts.EFFECTIVE.getId());
+            Map<String, Brand> brandMap = brands.stream().collect(Collectors.toMap(Brand::getCode,o->o));
+            products.stream().forEach(o->{o.setBrand(brandMap.get(o.getBrandCode()));});
+        }
         return products;
     }
 }
