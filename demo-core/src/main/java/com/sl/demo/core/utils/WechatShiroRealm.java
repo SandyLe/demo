@@ -22,10 +22,10 @@ public class WechatShiroRealm extends AuthorizingRealm {
         WechatOpenidToken token = (WechatOpenidToken) authenticationToken;
         String openid = token.getOpenId();
         System.out.println(openid);
-        AbstractUserService us = SpringUtils.getBean("userServiceImpl");
-        User user = us.findByWechatOpenId(openid);
+        /*AbstractUserService us = SpringUtils.getBean("userServiceImpl");
+        User user = us.findByWechatOpenId(openid);*/
 
-        AuthenticationInfo info = new SimpleAuthenticationInfo(openid, "ok", this.getClass().getSimpleName());
+        AuthenticationInfo info = new SimpleAuthenticationInfo(openid, token.getPassword(), this.getClass().getSimpleName());
         return info;
     }
 }

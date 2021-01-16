@@ -49,7 +49,9 @@ public class ShiroConfig {
         chainMap.put("/static/**", "anon");
         chainMap.put("/upload/**", "anon");
         chainMap.put("/login", "anon");
-        chainMap.put("/wechat/auth", "anon");
+        chainMap.put("/wechat/login", "anon");
+        chainMap.put("/wechat/getToken", "anon");
+        chainMap.put("/wechat/register", "anon");
         chainMap.put("/**", "authc");
 //        chainMap.put("/*", "perms");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(chainMap);

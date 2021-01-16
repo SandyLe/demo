@@ -12,6 +12,7 @@ public class WechatAccountDto {
     private String province;
     private String code;
     private String openid;
+    private String session_key;
 
     public Long getId() {
         return id;
@@ -91,5 +92,13 @@ public class WechatAccountDto {
 
     public void setOpenid(String openid) {
         this.openid = openid;
+    }
+
+    public String getSession_key() {
+        return session_key;
+    }
+
+    public void setSession_key(String session_key) {
+        this.session_key = session_key;
     }
 }
