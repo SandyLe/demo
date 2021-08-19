@@ -43,6 +43,12 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    public Brand findByCode(String code) {
+
+        return brandRepository.findByCode(code);
+    }
+
+    @Override
     public Pagination<Brand> findPage(Pagination<Brand> pagination) {
         Page<Brand> page = brandRepository.findAll(pagination);
         pagination.setTotalRecords(page.getTotalElements());

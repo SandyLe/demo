@@ -12,6 +12,9 @@ public interface BrandRepository extends JpaRepository<Brand,Long>, JpaSpecifica
     @Query("select nt from Brand nt where (nt.code in (?1)) and nt.rowSts = 10")
     public List<Brand> findByCodes(List<String> codes);
 
+    @Query("select nt from Brand nt where (nt.code = (?1)) and nt.rowSts = 10")
+    public Brand findByCode(String code);
+
     @Query("select nt from Brand nt where nt.productTypeCode = (?1) and nt.rowSts = 10")
     public List<Brand> findByProductType(String productType);
 }

@@ -10,6 +10,7 @@ public interface BrandService {
     Pagination<Brand> findPage(Pagination<Brand> pagination);
     Brand findById(Long id);
     void delete(Long[] id);
+    Brand findByCode(String code);
     List<Brand> findList(List<String> codes, Integer rowSts);
     List<Brand> findList(List<String> codes, String productTypeCode, Integer rowSts);
     List<Brand> findByProductType(String productType);

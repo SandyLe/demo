@@ -1,8 +1,10 @@
 package com.sl.demo.server.controller;
 
+import com.sl.demo.server.service.BrandService;
 import com.sl.demo.server.service.ProductService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.dto.util.Result;
+import com.sl.domain.entity.Brand;
 import com.sl.domain.entity.Product;
 import com.sl.domain.enums.RowSts;
 import io.swagger.annotations.Api;
@@ -17,6 +19,8 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private BrandService brandService;
 
     @PostMapping(value = {"/product/save"})
     public Result<Long> save(@RequestBody Product product){
@@ -28,7 +32,7 @@ public class ProductController {
         pagination = productService.findPage(pagination);
         return new Result<Pagination> (pagination);
     }
-    @GetMapping(value = {"/product/getOne"})
+    @GetMapping(value = {"/product/getOne","/fc/product/getOne"})
     public Result<Product> getOne(Long id){
         Product product = productService.findById(id);
         return new Result<Product> (product);

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>起起实业产品溯源</title>
+    <script src="http://192.168.0.101:8082/demo/api/static/js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        // document.getElementById("btn").onclick = ajaxRequest;
+        $(document).ready(function(){
+            var productCode = $("#productCode").val();
+            $("#btnSubmit").click(function(){
+                var queryParam = {productCode: productCode, traceCode: $("#textCode").val()};
+                $.ajax({
+                    url:"http://192.168.0.101:8082/demo/api/fc/productTrace/check",
+                    contentType: "application/json; charset=utf-8",
+                    type:'post',
+                    cache: false,
+                    data: JSON.stringify(queryParam),//转化为json字符串
+                    dataType:'json',
+                    success:function(result){
+                        $("#view").html(result.data.msg);
+                    }
+                });
+            });
+            $("#btnReset").click(function(){
+                $("#textCode").val('');
+                $("#view").html('');
+            });
+        });
+        /*]]>*/
+    </script>
+    <style rel="stylesheet">
+        .title {border-bottom: solid thin darkgray; color: cornflowerblue; padding-bottom: 5px;}
+        .infotable {border: darkgray solid thin; } .infotable td {border-bottom: darkgray solid thin; border-right: darkgray solid thin; margin: 0; padding-left: 5px; height: 30px;}
+        #textCode {width: 99%; height: 40px; align: center;}
+        #btnDiv {clear: both; height: 50px;}
+        #btnDiv button {width: 30%; margin: 10px 10%; height: 40px; float: left; border: none;}
+        #btnSubmit {background:  dodgerblue;} #btnReset {background: gainsboro; }
+        #resultDiv {width: 100%; background-color: lightgoldenrodyellow; height: 300px; margin: 0px; padding: 5px; align: center;}
+    </style>
+</head>
+<body>
+    <div>
+        <h2 align="center" class="title">产品信息 防伪溯源</h2>
+        <h3>产品信息</h3>
+        <input id="productCode" type="hidden" th:value="${product.code}"/>
+        <table class="infotable" width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+                <td>名称：</td>
+                <td><p th:text="${product.name}">名称</p></td>
+            </tr>
+            <tr>
+                <td>品牌：</td>
+                <td><p th:text="${null != product.brand ? product.brand.name : ''}">品牌</p></td>
+            </tr>
+            <tr>
+                <td>描述：</td>
+                <td><p th:text="${product.description}">品牌</p></td>
+            </tr>
+        </table>
+        <h3>防伪溯源</h3>
+        <p>刮开涂层，请输入溯源验证码</p>
+        <input type="text" name="code" placeholder="请输入验证码" id="textCode"/>
+        <div id="btnDiv">
+            <button id="btnSubmit">提交</button>
+            <button id="btnReset">重置</button>
+        </div>
+        <p></p>
+        <div id="resultDiv">
+            <label id="view"></label>
+        </div>
+    </div>
+
+</body>
+</html>

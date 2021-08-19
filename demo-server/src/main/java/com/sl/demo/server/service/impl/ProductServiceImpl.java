@@ -58,7 +58,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product findById(Long id) {
-        return productRepository.findOne(id);
+
+        Product product = productRepository.findOne(id);
+
+        if (null != product) {
+            Brand brand = brandService.findByCode(product.getBrandCode());
+            product.setBrand(brand);
+        }
+
+        return product;
     }
 
     @Override
@@ -87,5 +95,11 @@ public class ProductServiceImpl implements ProductService {
             }
         };
         return productRepository.findAll(specification);
+    }
+
+    @Override
+    public Product findByCode(String code) {
+
+        return productRepository.findByCode(code);
     }
 }
