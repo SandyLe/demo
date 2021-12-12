@@ -12,4 +12,5 @@ public interface ProductTraceHistoryService {
     ProductTraceHistory findById(Long id);
     void delete(Long[] id);
     List<ProductTraceHistory> findHistories(String productCode, String traceCode);
+    ProductTraceHistory findEarliest (String productCode, String traceCode);
 }

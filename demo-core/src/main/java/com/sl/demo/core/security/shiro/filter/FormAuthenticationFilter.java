@@ -2,6 +2,7 @@ package com.sl.demo.core.security.shiro.filter;
 
 import com.sl.domain.dto.wechat.WechatOpenidToken;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
@@ -9,6 +10,7 @@ import org.apache.shiro.web.util.WebUtils;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 public class FormAuthenticationFilter extends AuthenticatingFilter {
     public static final String DEFAULT_USERNAME = "username";
@@ -25,6 +27,7 @@ public class FormAuthenticationFilter extends AuthenticatingFilter {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader("access-token");
+        System.out.println(new Date() + ", token: => " + token);
         if(null != token && !"".equals(token)){
             return true;
         }
@@ -37,7 +40,9 @@ public class FormAuthenticationFilter extends AuthenticatingFilter {
             WechatOpenidToken token = new WechatOpenidToken(((HttpServletRequest)request).getHeader("access-token"));
             getSubject(request,response).login(token);
         }
-        return super.isAccessAllowed(request, response, mappedValue);
+        Boolean allowedFlag = super.isAccessAllowed(request, response, mappedValue);
+        System.out.println("allowedFlag: => " + allowedFlag);
+        return allowedFlag;
     }
 
     @Override

@@ -1,36 +1,84 @@
 server:
-    name: demo
-    ssl:
-      key-store: classpath:1023769_ssl.qifou.net.pfx
-      key-store-password: IK50XQSj
-      keyStoreType: PKCS12
-    port: 443
-    context-path: /demo/api
+  name: demo
+#  ssl:
+#    key-store: classpath:6717204_halten.xn--fiqs8s.pfx
+#    key-store-password: 8lt56ygs
+#    keyStoreType: PKCS12
+#  ssl:
+#    key-store: classpath:javaboy.p12
+#    key-alias: tomcathttps
+#    key-store-password: lixt123456
+  port: 8082
+  context-path: /demo/api
+  tomcat:
+    basedir: /home/wj/temp
 spring:
-    http:
-      encoding:
-        charset: UTF-8
-        force: true
-        enabled: true
-    datasource:
-        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false
-        username: root
-        #password: root
-        password: 198765
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+    multipart:
+      maxFileSize: 10Mb
+      maxRequestSize: 50Mb
+  mail:
+    #邮件协议smtp
+    host: smtp.ym.163.com
+    #发送者的邮件的用户名
+    username: l.hao@qiqi-industrial.com
+    #使用的编码
+    default-encoding: utf-8
+    #移动端客户授权码(在邮箱中设置)
+    password: luhao2180
+    port: 465
+    properties:
+      mail:
+        smtp:
+          timeout: 10000
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
 
-        #url: jdbc:mysql://localhost:3306/testsl?useUnicode=true&characterEncoding=utf-8&useSSL=false
-        #username: root
-        #password: tomkluas
+  datasource:
+    url: jdbc:mysql://localhost:3306/wjdb?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: WJ#123456
+    #password: 198765
+#    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false
+#    username: root
+#    password: root
 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
-    jpa:
-      hibernate:
-        ddl-auto: update
+  thymeleaf:
+    enabled: true  #开启thymeleaf视图解析
+    encoding: utf-8  #编码
+    prefix: classpath:/templates/  #前缀
+    cache: false  #是否使用缓存
+    #mode: HTML  #严格的HTML语法模式
+    suffix: .html  #后缀名
+    content-type: text/html
+
 wechat:
-  appId: wxd85b5675963e6701
-  secret: 4d0e0de5a0fb3d0a3ad19bfab4675899
+  appId: wx0b7abdc4a2bfb2d1
+  secret: 03e5edefd98712f600f6f6e7f40e6c0a
   grantType: authorization_code
   sessionHost: https://api.weixin.qq.com/sns/jscode2session
 upload:
-  path: D:\\upload\\
-  webPath: http://localhost:8081/demo/api/upload/
+  path: /Users/sandylee/Downloads/
+#  webPath: http://192.168.0.100:8082/demo/api/upload/
+  webPath: https://www.halten.中国/demo/api/upload/
+qCode:
+#  text: http://192.168.0.100:8082/demo/api/fc/product/sourceQuery?code=
+  text: https://www.halten.中国/demo/api/fc/product/sourceQuery?code=
+#  logoPath: /Users/sandylee/Downloads/halten.jpg
+  logoPath: /home/wj/halten.jpg
+

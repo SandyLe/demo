@@ -3,6 +3,7 @@ package com.sl.domain.entity.base;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -27,7 +28,7 @@ public class BaseEntity {
     @ApiModelProperty(value = "描述")
     private String description;
     @ApiModelProperty(value = "创建时间")
-    @CreatedDate
+    @CreationTimestamp
     private Date createDate;
     @ApiModelProperty(value = "更新时间")
     @UpdateTimestamp

@@ -20,7 +20,7 @@ public class ProductTraceHistory extends BaseEntity {
     @ApiModelProperty("溯源验证码")
     private String traceCode;
 
-    @ApiModelProperty("来源")
+    @ApiModelProperty("地址")
     private String source;
 
     public String getProductCode() {

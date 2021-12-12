@@ -10,5 +10,5 @@ import java.util.List;
 public interface NewsTypeRepository extends JpaRepository<NewsType, Long>, JpaSpecificationExecutor<NewsType> {
 
     @Query("select nt from NewsType nt where (nt.code in (?1)) and nt.rowSts = 10")
-    public List<NewsType> findList(List<String> codes);
+    List<NewsType> findList(List<String> codes);
 }

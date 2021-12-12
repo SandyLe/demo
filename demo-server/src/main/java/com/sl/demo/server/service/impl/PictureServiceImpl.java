@@ -4,8 +4,10 @@ import com.sl.demo.server.repository.PictureRepository;
 import com.sl.demo.server.service.PictureService;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.Picture;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -61,6 +63,7 @@ public class PictureServiceImpl implements PictureService {
                     predicates.add(cb.equal(root.get("albumCode"), albumCode));
                 }
                 query.where(predicates.toArray(new Predicate[]{}));
+                query.orderBy(cb.asc(root.get("sortIndex")));
                 return query.getRestriction();
             }
         };

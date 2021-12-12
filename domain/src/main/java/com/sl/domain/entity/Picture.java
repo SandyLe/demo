@@ -16,6 +16,8 @@ public class Picture extends BaseEntity {
     private String url;
     @ApiModelProperty(value = "图册")
     private String albumCode;
+    @ApiModelProperty(value = "排序")
+    private Integer sortIndex;
 
     public String getUrl() {
         return url;
@@ -31,5 +33,13 @@ public class Picture extends BaseEntity {
 
     public void setAlbumCode(String albumCode) {
         this.albumCode = albumCode;
+    }
+
+    public Integer getSortIndex() {
+        return sortIndex;
+    }
+
+    public void setSortIndex(Integer sortIndex) {
+        this.sortIndex = sortIndex;
     }
 }

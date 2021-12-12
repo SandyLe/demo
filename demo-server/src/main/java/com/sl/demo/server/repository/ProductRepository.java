@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface ProductRepository extends JpaRepository<Product,Long>, JpaSpecificationExecutor<Product> {
 
     @Query("select nt from Product nt where (nt.code = (?1)) and nt.rowSts = 10")
-    public Product findByCode(String code);
+    Product findByCode(String code);
 }

@@ -38,8 +38,8 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
         Map<String, Filter> filters = new HashMap<String, Filter>();
-        filters.put("authc", new FormAuthenticationFilter());
-        filters.put("perms", new PermissionsAuthorizationFilter());
+//        filters.put("authc", new FormAuthenticationFilter());
+//        filters.put("perms", new PermissionsAuthorizationFilter());
         shiroFilterFactoryBean.setFilters(filters);
         Map<String, String> chainMap = new LinkedHashMap<String, String>();
         chainMap.put("/login.jsp","anon");

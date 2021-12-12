@@ -14,7 +14,7 @@ public interface WechatService {
      * @param code
      * @return
      */
-    public JSONObject getOpenIdMsg (String code );
+    JSONObject getOpenIdMsg(String code);
 
     /**
      * 微信免密登录

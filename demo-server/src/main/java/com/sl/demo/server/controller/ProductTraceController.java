@@ -12,6 +12,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -61,8 +62,10 @@ public class ProductTraceController {
             result.setMsg("没有此产品验证码，请联系卖家查实！");
         } else {
             List<ProductTraceHistory> histories = productTraceHistoryService.findHistories(productTraceHistory.getProductCode(), productTraceHistory.getTraceCode());
+            productTraceHistory.setCreateDate(new Date());
             if (CollectionUtils.isEmpty(histories)) {
                 result.setMsg("此产品为正品，本次为第一次验证！");
+                result.setFirstQueryDate(productTraceHistory.getCreateDate());
             } else {
                 result.setMsg("本次为第 " + (histories.size() + 1) + " 次验证，多次验证，谨防假冒！" );
             }
@@ -72,4 +75,14 @@ public class ProductTraceController {
         return new Result<ProductTraceResult>(result);
     }
 
+
+    @PostMapping(value = {"/fc/productTrace/updateAddress"})
+    public Result<ProductTraceHistory> updateAddress(@RequestBody ProductTraceHistory productTraceHistory){
+
+        ProductTraceHistory exists = productTraceHistoryService.findById(productTraceHistory.getId());
+        exists.setSource(productTraceHistory.getSource());
+        productTraceHistoryService.save(exists);
+
+        return new Result<ProductTraceHistory>(productTraceHistory);
+    }
 }

@@ -11,7 +11,7 @@ public interface AlbumService {
 
     Album findById(Long id);
 
-    Pagination<Album> findPage(Pagination<Album> pagination);;
+    Pagination<Album> findPage(Pagination<Album> pagination);
 
     List<Album> findByCodes(List<String> codes);
 

@@ -5,17 +5,109 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>起起实业产品溯源</title>
-    <script src="http://192.168.0.101:8082/demo/api/static/js/jquery-3.5.1.min.js"></script>
+    <title>赫兰登HALTEN产品溯源</title>
+    <script src="/demo/api/static/js/jquery-3.5.1.min.js"></script>
+    <!-- 腾讯获取坐标需要引入的 -->
+    <script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+    <!-- 腾讯地图显示需要引入的 -->
+    <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&amp;key=BALBZ-GEB66-ALMS5-ELOO6-JYZ52-FWFDM;"></script>
     <script type="text/javascript">
         /*<![CDATA[*/
         // document.getElementById("btn").onclick = ajaxRequest;
+
+        var address = null;
+
+        /**用腾讯获取坐标**/
+        function coordinate(){
+
+            /**
+             *   qq.maps.Geolocation(key, referer) 参数(官网提供)：
+             *       key ： 必填，开发密钥(key)，申请地址 http://lbs.qq.com/mykey.html;
+             *       referer： 必填，调用来源，一般为您的应用名称，为了保障对您的服务，请务必填写！
+             *                 例如：referer=mapqq为了保障对您的服务，请务必填写！
+             *
+             *    sucCallback:定位成功的回调;
+             *
+             *    showErr:定位失败的回调;
+             *          options为定位选项，选填;
+             *          timeout:可以通过参数设置定位的超时时间，默认值为10s;
+             */
+            var geolocation = new qq.maps.Geolocation("BALBZ-GEB66-ALMS5-ELOO6-JYZ52-FWFDM", "myapp");
+            var options = {timeout: 8000};
+
+            geolocation.getLocation(sucCallback, showErr, options);
+        }
+
+        //定位成功回调
+        function sucCallback(position){
+            var mapInfo = JSON.stringify(position, null, 4);
+            var jsonMapInfo = eval('('+mapInfo+')');
+            // alert("腾讯经度为:"+jsonMapInfo.lng+",腾讯纬度为:"+jsonMapInfo.lat);
+
+            jiexiaddress(jsonMapInfo.lat,jsonMapInfo.lng);
+            // init(jsonMapInfo.lng, jsonMapInfo.lat);
+            // var latLng = new qq.maps.LatLng(jsonMapInfo.lat, jsonMapInfo.lng);
+            // citylocation.searchCityByLatLng(latLng);
+            debugger
+        }
+        //解析地址
+        function jiexiaddress(lat,lng){
+            var  url3 = encodeURI("https://apis.map.qq.com/ws/geocoder/v1/?location=" + lat + "," + lng + "&key=BALBZ-GEB66-ALMS5-ELOO6-JYZ52-FWFDM&output=jsonp&&callback=?");
+            $.getJSON(url3, function (result) {
+                if(result.result!=undefined){
+                    address = result.result.address;
+                    var resultFlag = $("#resultFlag").val();
+                    var historyId = $("#historyId").val();
+                    if (resultFlag == 1) {
+                        $("#firstAdd").html(address);
+                        $("#firstTime").html(timeStamp2String(new Date().getTime()));
+                    }
+                    if (resultFlag > 0) {
+                        $.ajax({
+                            type : "post",
+                            contentType: 'application/json',
+                            url : "../productTrace/updateAddress",
+                            data : JSON.stringify({id: historyId, source: address}),
+                            processData : false,
+                            success : function(data){}
+                        });
+                    }
+                }else{
+                    console.log("error")
+                }
+
+            })
+        }
+        //定位失败回调
+        function showErr(err){
+            console.log(err);
+        }
+
+        //在Jquery里格式化Date日期时间数据
+        function timeStamp2String(time){
+            var datetime = new Date();
+            datetime.setTime(time);
+            var year = datetime.getFullYear();
+            var month = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+            var date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+            var hour = datetime.getHours()< 10 ? "0" + datetime.getHours() : datetime.getHours();
+            var minute = datetime.getMinutes()< 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+            var second = datetime.getSeconds()< 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
+            return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
+        }
+
         $(document).ready(function(){
             var productCode = $("#productCode").val();
+            $("#f_menu").hover(function(){        $(this).text("联系我们");    });
             $("#btnSubmit").click(function(){
-                var queryParam = {productCode: productCode, traceCode: $("#textCode").val()};
+                var textCode = $("#textCode").val();
+                var queryParam = {productCode: productCode, traceCode: textCode, source: address};
+                if (!textCode) {
+                    alert("请输入验证码！");
+                    return;
+                }
                 $.ajax({
-                    url:"http://192.168.0.101:8082/demo/api/fc/productTrace/check",
+                    url:"../productTrace/check",
                     contentType: "application/json; charset=utf-8",
                     type:'post',
                     cache: false,
@@ -30,50 +122,235 @@
                 $("#textCode").val('');
                 $("#view").html('');
             });
+            $("#txtContent").focus(function(){
+                var content = $("#txtContent").val();
+                if (content == "输入内容 ...............") {
+                    $("#txtContent").val(null);
+                }
+            });
+
+            $("#txtContent").blur(function(){
+                var content = $("#txtContent").val();
+                if (!content) {
+                    $("#txtContent").val("输入内容 ...............");
+                }
+            });
+            $("#btnQuerySubmit").click(function(){
+                var $file1 = $("input[name='pic']").val();//用户文件内容(文件)
+                // 判断文件是否为空
+                if ($file1 == "") {
+                    alert("请选择上传的图片! ");
+                    return false;
+                }
+                //判断文件类型,我这里根据业务需求判断的是Excel文件
+                var fileName1 = $file1.substring($file1.lastIndexOf(".") + 1).toLowerCase();
+                if(fileName1 != "jpg" && fileName1 !="jpeg" && fileName1 !="png" && fileName1 !="gif"){
+                    alert("请选择图片文件!当前支持jpg、jpeg、png、gif格式！");
+                    return false;
+                }
+                //判断文件大小
+                var size1 = $("input[name='pic']")[0].files[0].size;
+                if (size1>1048576) {
+                    alert("上传文件不能大于1M!");
+                    return false;
+                }
+
+                var type = "file";
+                var formData = new FormData();//这里需要实例化一个FormData来进行文件上传
+                var txtContent = $("#txtContent").val();
+                if (txtContent=='输入内容 ...............') {
+                    txtContent = null;
+                }                formData.append(type,$("#txtPic")[0].files[0]);
+                formData.append("name", $('#txtName').val());
+                formData.append("contact",$("#txtContact").val());
+                formData.append("email",$("#txtEmail").val());
+                formData.append("content",txtContent);
+                //多文件上传在这里继续append
+                //eg :
+                //formData.append(type,$("#fileName1")[0].files[0]);
+                $.ajax({
+                    type : "post",
+                    url : "../feedback/save",
+                    data : formData,
+                    processData : false,
+                    contentType : false,
+                    success : function(data){
+                        if (data < 0) {
+                            alert("提交失败!");
+                        }else{
+                            alert("提交成功!");
+                            $("#txtPic").val(null);
+                            $('#txtName').val(null);
+                            $("#txtContact").val(null);
+                            $("#txtEmail").val(null);
+                            $("#txtContent").val(null);
+                        }}
+                });
+            });
+            $("#btnSuggestReset").click(function(){
+                $("#txtPic").val(null);
+                $('#txtName').val(null);
+                $("#txtContact").val(null);
+                $("#txtEmail").val(null);
+                $("#txtContent").val(null);
+            });
+            coordinate();
         });
         /*]]>*/
     </script>
     <style rel="stylesheet">
-        .title {border-bottom: solid thin darkgray; color: cornflowerblue; padding-bottom: 5px;}
+        * {padding: 0px; margin: 0px;}
+        body {font-size: 12px; font-family: "STSong"; padding: 0px; margin: 0px; height: 100%; width: auto;}
+        .title {padding-bottom: 1px; margin-top: 1rem;}
         .infotable {border: darkgray solid thin; } .infotable td {border-bottom: darkgray solid thin; border-right: darkgray solid thin; margin: 0; padding-left: 5px; height: 30px;}
-        #textCode {width: 99%; height: 40px; align: center;}
-        #btnDiv {clear: both; height: 50px;}
-        #btnDiv button {width: 30%; margin: 10px 10%; height: 40px; float: left; border: none;}
-        #btnSubmit {background:  dodgerblue;} #btnReset {background: gainsboro; }
-        #resultDiv {width: 100%; background-color: lightgoldenrodyellow; height: 300px; margin: 0px; padding: 5px; align: center;}
+        #traceHistory div{padding-left: 2.48%; }
+        #textCode {width: 99%; height: 40px; align: center; background: black; color: white; }
+        #txtName {width: 60%; height: 30px; align: center;}
+        #txtContact {width: 99%; height: 30px; align: center;}
+        #txtEmail {width: 99%; height: 30px; align: center;}
+        #txtPic {width: 99%; height: 30px; align: center;}
+        .btnDiv {clear: both; height: 50px;}
+        .btnDiv button {width: 30%; margin: 10px 10%; height: 40px; float: left; border: none;}
+        #btnSubmit {background:  black; color: white;} #btnReset {background:  black; color: white; }
+        #btnQuerySubmit {background:  black; color: white;} #btnSuggestReset {background:  black; color: white; }
+        #resultDiv {width: 100%; margin: 0px; padding: 5px; align: center;} #txtContent {background:  black; color: white; }
+        .commonDiv {width: 100%; float: left; border-bottom: 1px solid black; line-height: 22px; padding-top: 10px; padding-bottom: 10px;}
+        .logo{width: 45px; height: 50px; float: left; padding-left: 1.51%;}
+        .webtitle {width: 280px; float: left; padding-left:3.91%; padding-top:15px;  font-size: 14px;  }
+        .proInfoTitle {padding-top: 5px; margin-bottom: 10px; font-size: 14px; padding-left: 1.68%}
+        .proInfoContent {padding-top: 10px;}
+        .proImg {border: black 2px solid; width: 100px; margin-left: 2.13%; height: 100px; float: left;}
+        .proContentRight {padding: 10px;}
+        .proSpec {padding-left: 20px;}
+        .proName {padding-left: 20px;}
+        .starPic {padding-left: 20px;}
+        .detail {width: 100%; padding: 0px;}
+        .detail div p {padding-left: 4%;}
+        .detailContent {width: 100%; padding-bottom: 5px;}
+        .detailTitle {width: 110px; text-align:right; vertical-align: center; float: left}
+        .detailContent {float: left;}
+        .qRCode {float: right;}
+        .footerleft{width: 70%; font-size: 10px; float:left;padding-left: 1.68%}
+        #f_menu { font-size: 10px; position:fixed; bottom:120px; right:15px; width:60px; height:60px; background: black; opacity: 0.99; color: white; text-align: center; line-height: 50px; cursor: pointer;}
+        #container {height: 200px;}
+        .detailText {!vertical-align: center; padding: 0px;}
+        #formCopr {width: 100%; background-color: gainsboro;}
+        #formCopr table {width: inherit;}
+        .formText {width: 60%;}
+        .formText textarea {width: 98%;}
     </style>
 </head>
 <body>
-    <div>
-        <h2 align="center" class="title">产品信息 防伪溯源</h2>
-        <h3>产品信息</h3>
-        <input id="productCode" type="hidden" th:value="${product.code}"/>
-        <table class="infotable" width="100%" cellspacing="0" cellpadding="0">
-            <tr>
-                <td>名称：</td>
-                <td><p th:text="${product.name}">名称</p></td>
-            </tr>
-            <tr>
-                <td>品牌：</td>
-                <td><p th:text="${null != product.brand ? product.brand.name : ''}">品牌</p></td>
-            </tr>
-            <tr>
-                <td>描述：</td>
-                <td><p th:text="${product.description}">品牌</p></td>
-            </tr>
-        </table>
-        <h3>防伪溯源</h3>
-        <p>刮开涂层，请输入溯源验证码</p>
-        <input type="text" name="code" placeholder="请输入验证码" id="textCode"/>
-        <div id="btnDiv">
-            <button id="btnSubmit">提交</button>
-            <button id="btnReset">重置</button>
+        <div class="commonDiv">
+            <div class="logo"><img src="/demo/api/static/img/halten.jpg" width="45px" height="50px"/></div>
+            <div class="webtitle">赫兰登HALTEN商品防伪查询</div>
         </div>
-        <p></p>
-        <div id="resultDiv">
-            <label id="view"></label>
+        <div class="commonDiv" id="traceHistory">
+            <input type="hidden" th:value="${firstTrace.resultFlag}" id="resultFlag"/>
+            <input type="hidden" th:value="${firstTrace.historyId}" id="historyId"/>
+            <div>扫码详情：<span id="scanResult" th:text="${firstTrace.msg}"></span></div>
+            <div>首次查询时间：<span id="firstTime" th:text="${firstTrace.firstQueryDate}"></span></div>
+            <div>首次查询地址：<span id="firstAdd" th:text="${firstTrace.firstAdd}"></span></div>
         </div>
-    </div>
-
+        <!--<div class="commonDiv" id="container"></div>（定位图标）-->
+        <div class="commonDiv">
+            <div class="proInfoTitle"><div style="background-color: black; float: left; height: 30px; width: 7px;">&nbsp;</div> <span style="padding-bottom: 5px; padding-left: 5px;"> 商品信息</span></div>
+            <div class="proInfoContent">
+                <div class="proImg"><img th:src="${product.imgUrl}" width="96px" height="96px"/></div>
+                <div class="proContentRight">
+                    <div class="proName"><span class="proName" th:text="${product.name}"></span></div>
+                    <div class="starPic" th:hidden="${product.starPic ==null}"><img class="starPic" th:src="${product.starPic}" width="129px"/></div>
+                    <div class="proSpec"><span class="proName">规格型号：</span><span th:text="${product.spectxt}"></span></div>
+                </div>
+            </div>
+        </div>
+        <div class="commonDiv detail">
+            <table>
+                <tr class="detailContent">
+                    <td class="detailTitle"><span>境内责任人/总代理:</span></td>
+                    <td class="detailText"><span th:text="${product.agent}"></span></td>
+                </tr>
+                <tr class="detailContent">
+                    <td class="detailTitle"><span>商品成分:</span></td>
+                    <td class="detailText"><span th:text="${product.ingredient}"></span></td>
+                </tr>
+                <tr class="detailContent">
+                    <td class="detailTitle">生产批号:</td>
+                    <td class="detailText"><span th:text="${product.batchNo}"></span></td>
+                </tr>
+                <tr class="detailContent">
+                    <td class="detailTitle">保质期:</td>
+                    <td class="detailText"><span th:text="${product.expirationDate}"></span></td>
+                </tr>
+                <tr class="detailContent">
+                    <td class="detailTitle">原产地:</td>
+                    <td class="detailText"><span th:text="${product.sourceArea}"></span></td>
+                </tr>
+                <tr class="detailContent">
+                    <td class="detailTitle">使用方法:</td>
+                    <td class="detailText" style="word-break:keep-all"><div th:text="${product.useMethod}"></div></td>
+                </tr>
+            </table>
+        </div>
+        <div class="commonDiv detail">
+            <h1 align="center" class="title">防伪查询</h1>
+            <div>
+                <p>刮开涂层，请输入验证码</p>
+                <input id="productCode" type="hidden" th:value="${product.code}"/>
+                <input type="text" name="code" placeholder="请输入有效数字防伪验证码" id="textCode"/>
+                <p>如有疑问，请点击右侧客服按钮咨询。</p>
+                <div class="btnDiv">
+                    <button id="btnSubmit">查询</button>
+                    <button id="btnReset">重置</button>
+                </div>
+            </div>
+            <p></p>
+            <div id="resultDiv">
+                <label id="view"></label>
+            </div>
+        </div>
+        <div class="commonDiv">
+            <div class="proInfoTitle"><div style="background-color: black; float: left; height: 30px; width: 7px;">&nbsp;</div> <span style="padding-bottom: 5px; padding-left: 5px;"> 意见反馈及业务合作</span></div>
+            <div id="formCopr">
+                <table>
+                    <tr class="detailContent">
+                        <td class="detailTitle">姓名:</td>
+                        <td class="formText"><input type="text" name="name" id="txtName"/></td>
+                    </tr>
+                    <tr class="detailContent">
+                        <td class="detailTitle">联系方式:</td>
+                        <td class="formText"><input type="text" name="contact" id="txtContact"/></td>
+                    </tr>
+                    <tr class="detailContent">
+                        <td class="detailTitle">电子邮箱:</td>
+                        <td class="formText"><input type="email" name="email" id="txtEmail"/></td>
+                    </tr>
+                    <tr class="detailContent">
+                        <td class="detailTitle">上传图片:</td>
+                        <td class="formText"><input type="file" name="pic" id="txtPic" accept="image/*" /></td>
+                    </tr>
+                    <tr class="detailContent">
+                        <td class="formText" colspan="2">
+                            <textarea rows="4" cols="45" name="content" id="txtContent">输入内容 ...............</textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="btnDiv">
+                <button id="btnQuerySubmit">提交</button>
+                <button id="btnSuggestReset">重置</button>
+            </div>
+        </div>
+        <div class="commonDiv">
+            <div class="footerleft">
+                更多信息请关注赫兰登HALTEN微信公众号: halten_china ;
+                也可关注微信公众号查询防伪信息。
+                <img src="/demo/api/static/img/wechatSou.jpg" style="float: right;" width="70%" height="50%"/>
+            </div>
+            <div class="qRCode">
+                <img src="/demo/api/static/img/qrQode.jpeg" width="86px" height="86px"/>
+            </div>
+            <div id="f_menu"><img src="/demo/api/static/img/weixinchat.jpg" width="60px" height="60px"/></div>
+        </div>
 </body>
 </html>

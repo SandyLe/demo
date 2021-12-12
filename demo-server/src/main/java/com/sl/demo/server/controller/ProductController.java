@@ -10,7 +10,9 @@ import com.sl.domain.enums.RowSts;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 @RestController
@@ -27,6 +29,14 @@ public class ProductController {
         productService.save(product);
         return new Result<Long>(product.getId());
     }
+
+    @PostMapping(value = {"/product/upload"})
+    public Result<Long> upload(String name, String code, @RequestParam("starPic") MultipartFile starPic){
+        Product product = new Product();
+//        productService.save(product);
+        return new Result<Long>(product.getId());
+    }
+
     @GetMapping(value = {"/product/getPage"})
     public Result<Pagination> getPage(Pagination pagination){
         pagination = productService.findPage(pagination);
@@ -37,7 +47,11 @@ public class ProductController {
         Product product = productService.findById(id);
         return new Result<Product> (product);
     }
-
+    @GetMapping(value = {"/product/generateQcode"})
+    public Result<Product> generateQcode(Long id) throws Exception{
+        String productUrl = productService.generateQcode(id);
+        return new Result<Product> (productUrl);
+    }
     @PostMapping(value = {"/product/delete"})
     public Result<Long[]> delete(Long[] id){
         productService.delete(id);

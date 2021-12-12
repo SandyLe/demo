@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.sl.demo.core.utils.ImageUtil;
 import com.sl.demo.server.service.AlbumService;
 import com.sl.demo.server.service.PictureService;
+import com.sl.demo.server.util.FileUtil;
 import com.sl.demo.server.util.LoginUtils;
 import com.sl.domain.dto.PicDto;
 import com.sl.domain.dto.util.Result;
@@ -14,10 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -39,8 +37,9 @@ public class PicController {
 
     @ApiOperation(value = "图片上传",notes = "图片上传")
     @PostMapping(value = {"/pic/upload"})
-    public String upload(@RequestParam(required = true, value = "multipartFiles") MultipartFile[] multipartFiles, @RequestParam(required = false, value = "albumCode")String albumCode) {
+    public List<String> upload(@RequestParam(required = true, value = "multipartFiles") MultipartFile[] multipartFiles, @RequestParam(required = false, value = "albumCode")String albumCode) {
 
+        List<String> urlList = Lists.newArrayList();
         File path = new File(uploadPath + albumCode + File.separator);
         if(!path.exists()){
             path.mkdir();
@@ -49,11 +48,15 @@ public class PicController {
             List<String> files = new ArrayList<>();
             try{
                 for(MultipartFile multipartFile : multipartFiles){
-                    String endFix = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().indexOf("."));
+                    /*String endFix = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().indexOf("."));
                     String fileName = System.currentTimeMillis() + String.valueOf(new Random().nextInt()) + endFix;
                     File file = new File(uploadPath + albumCode + File.separator + fileName);
                     multipartFile.transferTo(file);
-                    files.add(file.getAbsolutePath());
+                    files.add(file.getAbsolutePath());*/
+
+                    String fileUploadPath = uploadPath + albumCode + File.separator;
+                    String fileName = FileUtil.uploadFile(multipartFile, fileUploadPath);
+                    files.add(fileUploadPath + fileName);
 
                     Picture picture = new Picture();
                     picture.setAlbumCode(albumCode);
@@ -63,13 +66,14 @@ public class PicController {
                     picture.setUpdateDate(new Date());
                     picture.setCreateUserId(LoginUtils.getLoginUser().getId());
                     pictureService.save(picture);
+                    urlList.add(picture.getUrl());
                 }
                 ImageUtil.generateThumbnail2Directory(uploadPath + albumCode + File.separator, files.toArray(new String[]{}));
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return "OK";
+        return urlList;
     }
 
     @ApiOperation(value = "删除图片",notes = "删除图片")
@@ -119,13 +123,21 @@ public class PicController {
     }
     @ApiOperation(value = "根据图册获取图片",notes = "根据图册获取图片")
     @GetMapping(value = {"/fc/pic/getList"})
-    public Result<Set<String>> getPics(@RequestParam(value = "albumCode", required = false) String albumCode,
+    public Result<List<String>> getPics(@RequestParam(value = "albumCode", required = false) String albumCode,
                                         @RequestParam(value = "limit", required = false) Integer limit){
         List<Picture> pictures = pictureService.findList(RowSts.EFFECTIVE.getId(), albumCode);
         if(null != limit && pictures.size() > limit){
             pictures = pictures.subList(0, limit);
         }
-        Set<String> urls = pictures.stream().collect(Collectors.toMap(o->o.getUrl(), o->o)).keySet();
-        return new Result<Set<String>>(urls);
+        List<String> urls = pictures.stream().map(Picture::getUrl).collect(Collectors.toList());
+        return new Result<List<String>>(urls);
+    }
+
+    @PostMapping(value = {"/pic/saveIndex"})
+    public Result<Long> save(@RequestBody Picture pic){
+        Picture picture = pictureService.findById(pic.getId());
+        picture.setSortIndex(pic.getSortIndex());
+        pictureService.save(picture);
+        return new Result<Long>(picture.getId());
     }
 }

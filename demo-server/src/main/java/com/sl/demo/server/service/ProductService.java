@@ -13,4 +13,5 @@ public interface ProductService {
     Product findByCode(String code);
     void delete(Long[] id);
     List<Product> findList(List<String> codes, String brandCode, Integer rowSts);
+    String generateQcode(Long id) throws Exception;
 }

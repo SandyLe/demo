@@ -15,8 +15,10 @@ public class ProductTrace extends BaseEntity {
 
     @ApiModelProperty("产品编码")
     private String productCode;
-    @ApiModelProperty("产品品牌")
+    @ApiModelProperty("产品")
     private Long productId;
+    @Transient
+    private Product product;
 
     @ApiModelProperty("溯源验证码")
     private String traceCode;
@@ -54,5 +56,13 @@ public class ProductTrace extends BaseEntity {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

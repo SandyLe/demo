@@ -19,10 +19,12 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 import java.security.MessageDigest;
 
 
@@ -64,7 +66,9 @@ public class LoginController {
     }
 
     @GetMapping(value = {"/getUserInfo"})
-    public Result<LoginUser> getUserInfo(@RequestParam String token) {
+    public Result<LoginUser> getUserInfo(@RequestParam String token, HttpServletRequest request) {
+
+        System.out.println("param: => " + token + "," + request.getHeader("token"));
         LoginUser loginUser =(LoginUser)LoginUtils.getSession().getAttribute(LoginUtils.LOGIN_USER);
         if(null == loginUser || !token.equals(loginUser.getToken())){
             return new Result<>();

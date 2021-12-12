@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 import com.sl.demo.server.repository.ProductRepository;
 import com.sl.demo.server.service.BrandService;
 import com.sl.demo.server.service.ProductService;
+import com.sl.demo.server.util.QRCodeUtils;
 import com.sl.domain.dto.util.Pagination;
 import com.sl.domain.entity.Brand;
 import com.sl.domain.entity.Product;
 import com.sl.domain.enums.RowSts;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private BrandService brandService;
+
+    @Value("${qCode.text}")
+    private String text;
+
+    @Value("${qCode.logoPath}")
+    private String logoPath;
+
+    @Value("${upload.path}")
+    private String destPath;
+
+    @Value("${upload.webPath}")
+    private String webPath;
 
     @Override
     public void save(Product product) {
@@ -101,5 +115,17 @@ public class ProductServiceImpl implements ProductService {
     public Product findByCode(String code) {
 
         return productRepository.findByCode(code);
+    }
+
+    @Override
+    public String generateQcode(Long id) throws Exception {
+
+        Product product = findById(id);
+        String url = text + product.getCode();
+        String path = QRCodeUtils.encode(url, logoPath, destPath, true);
+        String qCodePath = webPath + path;
+        product.setQcode(qCodePath);
+        save(product);
+        return qCodePath;
     }
 }

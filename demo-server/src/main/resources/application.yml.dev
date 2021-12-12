@@ -1,0 +1,61 @@
+server:
+  name: demo
+    #ssl:
+    #key-store: classpath:1023769_ssl.qifou.net.pfx
+    #key-store-password: IK50XQSj
+  #keyStoreType: PKCS12
+#  ssl:
+#    key-store: classpath:javaboy.p12
+#    key-alias: tomcathttps
+#    key-store-password: lixt123456
+  port: 8082
+  context-path: /demo/api
+  tomcat:
+    basedir: /home/wj/temp
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+    multipart:
+      maxFileSize: 10Mb
+      maxRequestSize: 50Mb
+  datasource:
+#    url: jdbc:mysql://localhost:3306/wjdb?useUnicode=true&characterEncoding=utf-8&useSSL=false
+#    username: root
+#    password: WJ#123456
+    #password: 198765
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  thymeleaf:
+    enabled: true  #开启thymeleaf视图解析
+    encoding: utf-8  #编码
+    prefix: classpath:/templates/  #前缀
+    cache: false  #是否使用缓存
+    #mode: HTML  #严格的HTML语法模式
+    suffix: .html  #后缀名
+    content-type: text/html
+
+wechat:
+  appId: wx0b7abdc4a2bfb2d1
+  secret: 03e5edefd98712f600f6f6e7f40e6c0a
+  grantType: authorization_code
+  sessionHost: https://api.weixin.qq.com/sns/jscode2session
+upload:
+  path: /Users/sandylee/Downloads/
+  webPath: http://192.168.0.110:8082/demo/api/upload/
+#  webPath: http://www.halten.中国/demo/api/upload/
+qCode:
+  text: http://192.168.0.110:8082/demo/api/fc/product/sourceQuery?code=
+#  text: http://www.halten.中国/demo/api/fc/product/sourceQuery?code=
+  logoPath: /Users/sandylee/Downloads/halten.jpg
+#  logoPath: /home/wj/halten.jpg
+
