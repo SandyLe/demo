@@ -43,8 +43,14 @@ public class ProductTraceServiceImpl implements ProductTraceService {
     }
 
     @Override
-    public ProductTrace findByProductTraceCode(String productCode, String traceCode) {
+    public ProductTrace findByProductTraceCode(String traceCode) {
 
-        return productTraceRepository.findByProductTraceCode(productCode, traceCode);
+        return productTraceRepository.findByProductTraceCode(traceCode);
+    }
+
+    @Override
+    public ProductTrace findByProductScanCode(String productCode, String scanCode) {
+
+        return productTraceRepository.findByProductScanCode(productCode, scanCode);
     }
 }

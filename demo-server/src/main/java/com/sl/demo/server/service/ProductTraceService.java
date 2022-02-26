@@ -9,5 +9,6 @@ public interface ProductTraceService {
     Pagination<ProductTrace> findPage(Pagination<ProductTrace> pagination);
     ProductTrace findById(Long id);
     void delete(Long[] id);
-    ProductTrace findByProductTraceCode(String productCode, String traceCode);
+    ProductTrace findByProductTraceCode(String traceCode);
+    ProductTrace findByProductScanCode(String productCode, String scanCode);
 }

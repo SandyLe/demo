@@ -52,4 +52,16 @@ public class ProductTraceHistoryServiceImpl implements ProductTraceHistoryServic
 
         return productTraceHistoryRepository.findEarliest(productCode, traceCode);
     }
+
+    @Override
+    public List<ProductTraceHistory> findHistoriesByScanCode(String productCode, String scanCode) {
+
+        return productTraceHistoryRepository.findHistoriesByScanCode(productCode, scanCode);
+    }
+
+    @Override
+    public ProductTraceHistory findEarliestByScanCode (String productCode, String scanCode) {
+
+        return productTraceHistoryRepository.findEarliestByScanCode(productCode, scanCode);
+    }
 }

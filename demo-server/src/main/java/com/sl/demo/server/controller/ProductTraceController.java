@@ -56,12 +56,12 @@ public class ProductTraceController {
 
         ProductTraceResult result = new ProductTraceResult();
         result.setResultFlag(0);
-        ProductTrace productTrace = productTraceService.findByProductTraceCode(productTraceHistory.getProductCode(), productTraceHistory.getTraceCode());
+        ProductTrace productTrace = productTraceService.findByProductTraceCode(productTraceHistory.getTraceCode());
         if (null == productTrace) {
             result.setResultFlag(-1);
             result.setMsg("没有此产品验证码，请联系卖家查实！");
         } else {
-            List<ProductTraceHistory> histories = productTraceHistoryService.findHistories(productTraceHistory.getProductCode(), productTraceHistory.getTraceCode());
+            List<ProductTraceHistory> histories = productTraceHistoryService.findHistories(productTrace.getProductCode(), productTraceHistory.getTraceCode());
             productTraceHistory.setCreateDate(new Date());
             if (CollectionUtils.isEmpty(histories)) {
                 result.setMsg("此产品为正品，本次为第一次验证！");
@@ -69,7 +69,10 @@ public class ProductTraceController {
             } else {
                 result.setMsg("本次为第 " + (histories.size() + 1) + " 次验证，多次验证，谨防假冒！" );
             }
+            productTraceHistory.setProductCode(productTrace.getProductCode());
             productTraceHistoryService.save(productTraceHistory);
+            histories.add(productTraceHistory);
+            result.setHistories(histories);
         }
 
         return new Result<ProductTraceResult>(result);
@@ -84,5 +87,16 @@ public class ProductTraceController {
         productTraceHistoryService.save(exists);
 
         return new Result<ProductTraceHistory>(productTraceHistory);
+    }
+
+    @GetMapping(value = {"/fc/product/scanHistories"})
+    public Result<ProductTraceResult> scanHistories(@RequestParam(value = "code", required = true, defaultValue = "0") String code,
+                                                    @RequestParam(value = "scanCode", required = false) String scanCode){
+
+        ProductTraceResult result = new ProductTraceResult();
+        result.setResultFlag(0);
+        List<ProductTraceHistory> histories = productTraceHistoryService.findHistoriesByScanCode(code, scanCode);
+        result.setHistories(histories);
+        return new Result<ProductTraceResult>(result);
     }
 }

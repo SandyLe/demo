@@ -70,12 +70,14 @@ public class ProductTraceTaskServiceImpl implements ProductTraceTaskService {
             Integer count = task.getEnd() - task.getStart() + 1;
             List<String> midStrs = generateStr(task.getMidCount(), task.getStart(), task.getEnd());
             List<String> endStrs = generateRandomStr(task.getEndCount(), count);
+            List<String> scanStrs = generateRandomStr(task.getEndCount(), count);
             for (int i = task.getStart(); i <= task.getEnd(); i++){
 
                 ProductTrace productTrace = new ProductTrace();
                 productTrace.setProductCode(task.getProductCode());
                 productTrace.setProductId(task.getProductId());
                 productTrace.setTraceCode(task.getPrefix() + midStrs.get(i-task.getStart()) + endStrs.get(i-task.getStart()));
+                productTrace.setScanCode(productTrace.getTraceCode() + scanStrs.get(i-task.getStart()));
                 productTraceService.save(productTrace);
             }
             task.setIsGen(1);

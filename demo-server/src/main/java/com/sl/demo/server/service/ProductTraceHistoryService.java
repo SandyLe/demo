@@ -13,4 +13,6 @@ public interface ProductTraceHistoryService {
     void delete(Long[] id);
     List<ProductTraceHistory> findHistories(String productCode, String traceCode);
     ProductTraceHistory findEarliest (String productCode, String traceCode);
+    List<ProductTraceHistory> findHistoriesByScanCode(String productCode, String scanCode);
+    ProductTraceHistory findEarliestByScanCode (String productCode, String scanCode);
 }

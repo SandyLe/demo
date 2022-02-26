@@ -225,27 +225,6 @@
             coordinate();
 
             $('#layer_btn').click(function() {
-                var html = $("#sourceDetail").html();
-                debugger
-                if (''==html) {
-                    $.ajax({
-                        url:"../product/scanHistories?code="+productCode + "&scanCode=" + $("#scanCode").val(),
-                        type:'get',
-                        cache: false,
-                        dataType:'json',
-                        success:function(result){
-                            var flag = result.data.resultFlag;
-                            if (flag == 0) {
-                                var histories = result.data.histories;
-                                var htmlResult = '<p><b style="padding-bottom: 10px;">该二维码被扫描记'+ histories.length + '次，请根据扫描详情判断</b></p>';
-                                for(var i=0; i<histories.length; i++){
-                                    htmlResult = htmlResult + '<p><b>第' + (i+1) +  '次： </b>' + timeStamp2String(histories[i].createDate) + '，' + (null != histories[i].source ? histories[i].source : "") + '</p>';
-                                }
-                                $("#sourceDetail").html(htmlResult);
-                            }
-                        }
-                    });
-                }
                 $('.masking').fadeIn();
             })
             $('.close').click(function(event) {
@@ -348,60 +327,10 @@
             <div class="logo"><img src="/demo/api/static/img/halten.jpg" width="45px" height="50px"/></div>
             <div class="webtitle">赫兰登HALTEN商品防伪查询</div>
         </div>
-        <div class="commonDiv" id="traceHistory">
-            <input type="hidden" th:value="${firstTrace.resultFlag}" id="resultFlag"/>
-            <input type="hidden" th:value="${firstTrace.historyId}" id="historyId"/>
-            <input type="hidden" th:value="${firstTrace.scanCode}" id="scanCode"/>
-            <div><a href="javascript:void(0);" id="layer_btn">点击查看更多扫码详情</a></div>
-            <!--<div>扫码详情：<span id="scanResult" th:text="${firstTrace.msg}"></span></div>-->
-            <div>首次查询时间：<span id="firstTime" th:text="${firstTrace.firstQueryDate}"></span></div>
-            <div>首次查询地址：<span id="firstAdd" th:text="${firstTrace.firstAdd}"></span></div>
-        </div>
-        <!--<div class="commonDiv" id="container"></div>（定位图标）-->
-        <div class="commonDiv">
-            <div class="proInfoTitle"><div style="background-color: black; float: left; height: 30px; width: 7px;">&nbsp;</div> <span style="padding-bottom: 5px; padding-left: 5px;"> 商品信息</span></div>
-            <div class="proInfoContent">
-                <div class="proImg"><img th:src="${product.imgUrl}" width="96px" height="96px"/></div>
-                <div class="proContentRight">
-                    <div class="proName"><span class="proName" th:text="${product.name}"></span></div>
-                    <div class="starPic" th:hidden="${product.starPic ==null}"><img class="starPic" th:src="${product.starPic}" width="129px"/></div>
-                    <div class="proSpec"><span class="proName">规格型号：</span><span th:text="${product.spectxt}"></span></div>
-                </div>
-            </div>
-        </div>
-        <div class="commonDiv detail">
-            <table>
-                <tr class="detailContent">
-                    <td class="detailTitle"><span>境内责任人/总代理:</span></td>
-                    <td class="detailText"><span th:text="${product.agent}"></span></td>
-                </tr>
-                <tr class="detailContent">
-                    <td class="detailTitle"><span>商品成分:</span></td>
-                    <td class="detailText"><span th:text="${product.ingredient}"></span></td>
-                </tr>
-                <tr class="detailContent">
-                    <td class="detailTitle">生产批号:</td>
-                    <td class="detailText"><span th:text="${product.batchNo}"></span></td>
-                </tr>
-                <tr class="detailContent">
-                    <td class="detailTitle">保质期:</td>
-                    <td class="detailText"><span th:text="${product.expirationDate}"></span></td>
-                </tr>
-                <tr class="detailContent">
-                    <td class="detailTitle">原产地:</td>
-                    <td class="detailText"><span th:text="${product.sourceArea}"></span></td>
-                </tr>
-                <tr class="detailContent">
-                    <td class="detailTitle">使用方法:</td>
-                    <td class="detailText" style="word-break:keep-all"><div th:text="${product.useMethod}"></div></td>
-                </tr>
-            </table>
-        </div>
         <div class="commonDiv detail">
             <h1 align="center" class="title">防伪查询</h1>
             <div>
                 <p>刮开涂层，请输入验证码</p>
-                <input id="productCode" type="hidden" th:value="${product.code}"/>
                 <input type="text" name="code" placeholder="请输入有效数字防伪验证码" id="textCode"/>
                 <div id="resultDiv">
                     <div>查询结果</div>
@@ -430,38 +359,6 @@
             <p></p>
         </div>
         <div class="commonDiv">
-            <div class="proInfoTitle"><div style="background-color: black; float: left; height: 30px; width: 7px;">&nbsp;</div> <span style="padding-bottom: 5px; padding-left: 5px;"> 意见反馈及业务合作</span></div>
-            <div id="formCopr">
-                <table>
-                    <tr class="detailContent">
-                        <td class="detailTitle">姓名:</td>
-                        <td class="formText"><input type="text" name="name" id="txtName"/></td>
-                    </tr>
-                    <tr class="detailContent">
-                        <td class="detailTitle">联系方式:</td>
-                        <td class="formText"><input type="text" name="contact" id="txtContact"/></td>
-                    </tr>
-                    <tr class="detailContent">
-                        <td class="detailTitle">电子邮箱:</td>
-                        <td class="formText"><input type="email" name="email" id="txtEmail"/></td>
-                    </tr>
-                    <tr class="detailContent">
-                        <td class="detailTitle">上传图片:</td>
-                        <td class="formText"><input type="file" name="pic" id="txtPic" accept="image/*" /></td>
-                    </tr>
-                    <tr class="detailContent">
-                        <td class="formText" colspan="2">
-                            <textarea rows="4" cols="45" name="content" id="txtContent">输入内容 ...............</textarea>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="btnDiv">
-                <button id="btnQuerySubmit">提交</button>
-                <button id="btnSuggestReset">重置</button>
-            </div>
-        </div>
-        <div class="commonDiv">
             <div class="footerleft">
                 更多信息请关注赫兰登HALTEN微信公众号: halten_china ;
                 也可关注微信公众号查询防伪信息。
@@ -477,7 +374,9 @@
         <div class="masking"><!--遮罩-->
             <div class="layer"><!--弹窗-->
                 <a class="close">关闭</a><!--关闭-->
-                <div id="sourceDetail"></div>
+                <div id="sourceDetail">
+
+                </div>
             </div>
         </div>
 </body>

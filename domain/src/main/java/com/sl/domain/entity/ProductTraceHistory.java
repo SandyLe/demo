@@ -19,6 +19,8 @@ public class ProductTraceHistory extends BaseEntity {
 
     @ApiModelProperty("溯源验证码")
     private String traceCode;
+    @ApiModelProperty("搜索码")
+    private String scanCode;
 
     @ApiModelProperty("地址")
     private String source;
@@ -53,5 +55,13 @@ public class ProductTraceHistory extends BaseEntity {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getScanCode() {
+        return scanCode;
+    }
+
+    public void setScanCode(String scanCode) {
+        this.scanCode = scanCode;
     }
 }
